@@ -42,11 +42,11 @@ services:
         value: https://rpc.mainnet.chain.robinhood.com
       # The live deployment. Both addresses are required: the server refuses to boot without them.
       - key: PACT_ESCROW_ADDRESS
-        value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
+        value: "0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6"
       - key: PACT_NAMES_ADDRESS
-        value: 0x6EF287a4AFa957B81D899203E46a5186A6D3B810
+        value: "0x6EF287a4AFa957B81D899203E46a5186A6D3B810"
       - key: PACT_WIF_ADDRESS
-        value: 0x5173b8eA6923c2d40267890D45C46a3480954773
+        value: "0x5173b8eA6923c2d40267890D45C46a3480954773"
       - key: PACT_ESCROW_DEPLOY_BLOCK
         value: "110690230"
       # Must be byte-identical to the web service's value, or a token minted here is rejected there.
@@ -73,11 +73,11 @@ services:
       - key: NEXT_PUBLIC_CHAIN
         value: mainnet
       - key: NEXT_PUBLIC_ESCROW_ADDRESS
-        value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
+        value: "0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6"
       - key: NEXT_PUBLIC_NAMES_ADDRESS
-        value: 0x6EF287a4AFa957B81D899203E46a5186A6D3B810
+        value: "0x6EF287a4AFa957B81D899203E46a5186A6D3B810"
       - key: NEXT_PUBLIC_WIF_ADDRESS
-        value: 0x5173b8eA6923c2d40267890D45C46a3480954773
+        value: "0x5173b8eA6923c2d40267890D45C46a3480954773"
       # The block the registry was created in. Above the chain head returns nothing at all, and the
       # talent board would render empty rather than error.
       - key: NEXT_PUBLIC_NAMES_DEPLOY_BLOCK
@@ -92,6 +92,11 @@ services:
       # Same value as the MCP service.
       - key: SESSION_SECRET
         sync: false
+      # Operators, on top of the treasury and resolver which are read from the contract. Inlined at
+      # build time like every NEXT_PUBLIC_* value: the /admin page decides client-side whether to
+      # offer the sign-in, so a value supplied only at runtime leaves the deployer locked out.
+      - key: NEXT_PUBLIC_ADMIN_ADDRESSES
+        value: "0x2bAFb4513b5e9a8C6BBb9ce063f5b18BF1B2cc1E"
       # Set this to the MCP's public URL once it exists, e.g. https://pact-mcp.onrender.com
       - key: PACT_MCP_URL
         sync: false
