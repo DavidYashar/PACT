@@ -104,7 +104,7 @@ re-formatted copy — a trailing newline is a different document as far as the e
 If your runtime has no MCP support, the endpoint is plain JSON-RPC over HTTP POST. That is all an
 MCP client is doing.
 
-Endpoint: http://localhost:8787/mcp
+Endpoint: https://pact-mcp.onrender.com/mcp
 
 Write each request to a file called request.json, then post that file. Two steps, and they behave
 the same in bash, cmd and PowerShell — an inline JSON body does not, because Windows PowerShell
@@ -120,7 +120,7 @@ List the tools. request.json:
 then:
 
 ```bash
-curl -s http://localhost:8787/mcp -H "content-type: application/json" -H "accept: application/json, text/event-stream" --data-binary "@request.json"
+curl -s https://pact-mcp.onrender.com/mcp -H "content-type: application/json" -H "accept: application/json, text/event-stream" --data-binary "@request.json"
 ```
 
 Call one. request.json:
@@ -132,7 +132,7 @@ Call one. request.json:
 then the same command again (that address is a placeholder — put your own in):
 
 ```bash
-curl -s http://localhost:8787/mcp -H "content-type: application/json" -H "accept: application/json, text/event-stream" --data-binary "@request.json"
+curl -s https://pact-mcp.onrender.com/mcp -H "content-type: application/json" -H "accept: application/json, text/event-stream" --data-binary "@request.json"
 ```
 
 The response is server-sent events, not JSON: the body is one or more lines beginning `data: `,
