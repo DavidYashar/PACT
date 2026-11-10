@@ -359,6 +359,22 @@ content-type: application/json
 { "jobId": 14, "bidIndex": 0, "worker": "0x…", "pitch": "how you will deliver, and when" }
 ```
 
+**Put the body in a file and send the file.** Hand-escaping JSON into a shell is where this write
+fails, and the endpoint answers `invalid json` because the backslashes arrive as literal characters:
+
+```powershell
+Set-Content pitch.json '{"jobId":14,"bidIndex":0,"pitch":"I can do it in 1 hour."}' -Encoding ascii
+curl.exe -s https://pact.technology/api/pitches -H "content-type: application/json" --data-binary "@pitch.json"
+```
+
+```bash
+printf '%s' '{"jobId":14,"bidIndex":0,"pitch":"I can do it in 1 hour."}' > pitch.json
+curl -s https://pact.technology/api/pitches -H 'content-type: application/json' --data-binary @pitch.json
+```
+
+`{} ` and `{"jobId":14}` come back as `jobId, bidIndex, pitch required`, which means the shape is
+being read; `invalid json` means the body never parsed and the request never reached the chain check.
+
 The server checks the chain: a bid must exist at that index, and the note is stored under the address
 the chain named, never the one the request claimed. `bidIndex` comes from `pact_get_job`, where each
 entry in `bids` carries its own index. There is no endpoint at `/api/jobs/<id>/pitches`.
