@@ -1,4 +1,4 @@
-import { config, BOND_BPS, BPS, FILING_FEE_BPS, STATE_NAME, State, type Address } from "../config.js";
+import { config, BOND_BPS, BPS, FILING_FEE_BPS, STATE_NAME, SUPERSEDE_COOLDOWN_MS, State, type Address } from "../config.js";
 import { escrowAbi, namesAbi, wifAbi } from "../abi.js";
 import {
   client,
@@ -15,11 +15,11 @@ import {
   readWifBalance,
 } from "../chain.js";
 import { buildStep, expectedCall } from "../validate.js";
-import { createIntent, reserveNonces, type Intent, type Step } from "../intents.js";
+import { createIntent, newestPendingIntent, reserveNonces, type Intent, type Step } from "../intents.js";
 import { termsDigest, textDigest, type Terms } from "../content.js";
 import { PERMIT2, PERMIT2_ABI, ERC20_ABI, ROUTER_ABI, UNIVERSAL_ROUTER, encodeSwap, poolFor, quoteExactIn, withSlippage } from "../swap.js";
 
-export type PlanRefusal = { ok: false; reason: string; fix?: string };
+export type PlanRefusal = { ok: false; reason: string; fix?: string; retryAfterMs?: number };
 export type PlanSuccess = { ok: true; intent: Intent; superseded: number };
 
 const RESERVED = new Set(["pact", "admin", "treasury", "resolver", "support", "official"]);
@@ -148,6 +148,27 @@ export async function plan(params: {
   note?: string;
 }): Promise<PlanSuccess | PlanRefusal> {
   const address = params.address;
+
+  /// One live plan per wallet, and no replacing it within the cooldown: otherwise a caller can flip
+  /// an agent's plan out from under a signature it is about to send. The check reads the ledger, so
+  /// a refused plan — wrong size, missing allowance, closed window — leaves nothing behind to wait
+  /// for. An agent looping on sizes is paced by the chain, not by its own failed attempts.
+  const livePlan = await newestPendingIntent(address);
+  if (livePlan) {
+    const ageMs = Date.now() - livePlan.createdAt.getTime();
+    if (ageMs < SUPERSEDE_COOLDOWN_MS) {
+      const waitMs = SUPERSEDE_COOLDOWN_MS - ageMs;
+      return {
+        ok: false,
+        reason:
+          `your plan ${livePlan.id} (${livePlan.action}) was prepared ${Math.floor(ageMs / 1000)}s ago ` +
+          `and is still pending; it was not submitted`,
+        fix: `submit it with pact_submit, or plan again in ${Math.ceil(waitMs / 1000)}s`,
+        retryAfterMs: waitMs,
+      };
+    }
+  }
+
   const registered = await isRegistered(address);
 
   const now = await chainNow();

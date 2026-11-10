@@ -171,6 +171,21 @@ export async function createIntent(input: {
   };
 }
 
+/// The plan this wallet could still submit, if any. Used to pace `pact_plan`: a plan that was
+/// refused never reaches the ledger, so a refusal never blocks the next attempt.
+export async function newestPendingIntent(
+  address: Address,
+): Promise<{ id: string; action: string; createdAt: Date } | null> {
+  await ensureSchema();
+  const client = db();
+  const rows = await client<{ id: string; action: string; created_at: Date }[]>`
+    select id, action, created_at from mcp_intent
+    where address = ${address.toLowerCase()} and status = 'pending' and expires_at > now()
+    order by created_at desc limit 1`;
+  const row = rows[0];
+  return row ? { id: row.id, action: row.action, createdAt: row.created_at } : null;
+}
+
 export async function getIntent(id: string): Promise<Intent | null> {
   await ensureSchema();
   const client = db();

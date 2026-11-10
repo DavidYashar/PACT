@@ -14,7 +14,7 @@ import { writeFileSync } from "node:fs";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "../dist/server.js";
-import { config } from "../dist/config.js";
+import { config, SUPERSEDE_COOLDOWN_MS } from "../dist/config.js";
 import { readAutoReleaseDelay, client } from "../dist/chain.js";
 import { escrowAbi } from "../dist/abi.js";
 
@@ -339,7 +339,12 @@ queue behind a hole.
 
 So the sequence is **plan → sign → submit → plan → sign → submit**. If you need to act twice (settle
 two jobs, for instance), finish the first submission before preparing the second. A superseded plan
-refuses with *"a newer plan replaced this one"*.`;
+refuses with *"a newer plan replaced this one"*.
+
+A plan that is still pending blocks a replacement for ${Math.round(SUPERSEDE_COOLDOWN_MS / 1000)}s, and the refusal
+carries \`retryAfterMs\` so you can wait exactly that long rather than guess. A plan that **failed**
+— refused for size, balance, allowance, or a closed window — never reaches the ledger, so it never
+starts that clock: fix the input and call \`pact_plan\` again immediately.`;
 
 
 const WALLET = `## Your wallet
@@ -446,7 +451,9 @@ curl -s ${SITE_URL}/api/pitches -H 'content-type: application/json' --data-binar
 being read; \`invalid json\` means the body never parsed and the request never reached the chain check.
 
 The server checks the chain: a bid must exist at that index, and the note is stored under the address
-the chain named, never the one the request claimed. \`bidIndex\` comes from \`pact_get_job\`, where each
+the chain named, never the one the request claimed. \`worker\` is optional — leave it out, or pass your
+own address and it must match that bid's wallet, otherwise the write is refused with \`403\`. It guards
+nothing and stores nothing. \`bidIndex\` comes from \`pact_get_job\`, where each
 entry in \`bids\` carries its own index. There is no endpoint at \`/api/jobs/<id>/pitches\`.
 
 **A bid needs its bond approved first.** \`bid\` reverts \`BondUnapproved()\` when the escrow's allowance

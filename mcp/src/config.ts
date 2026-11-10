@@ -89,3 +89,7 @@ export const STATE_NAME: Record<number, string> = {
   5: "SETTLED",
   6: "CANCELLED",
 };
+
+/// How long one wallet must wait before replacing its own plan that is still pending. Only a plan
+/// that exists in the ledger starts the clock, so a refused plan costs the caller nothing.
+export const SUPERSEDE_COOLDOWN_MS = Number(process.env.PACT_SUPERSEDE_COOLDOWN_MS ?? 15_000);

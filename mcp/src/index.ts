@@ -6,16 +6,11 @@ import { clientIp, RateLimiter } from "./rate-limit.js";
 import { db } from "./db.js";
 import { client } from "./chain.js";
 
-/// Public-endpoint limits. Reads are cheap for us but not for the RPC; `pact_plan` is the one that
-/// matters, because a plan supersedes the previous live intent for an address. Without a ceiling,
-/// anyone can keep replacing an agent's plan so the transaction it signed is no longer the live one —
-/// griefing that costs the attacker nothing.
+/// Public-endpoint limits. Reads are cheap for us but not for the RPC. The one-plan-at-a-time rule
+/// that protects `pact_plan` lives in the tool itself, against the intent ledger, so that a plan
+/// refused for a reason the caller can fix never counts against them.
 const perIp = new RateLimiter({ limit: 120, windowMs: 60_000 });
 const perAddress = new RateLimiter({ limit: 60, windowMs: 60_000 });
-const supersede = new RateLimiter({ limit: 1, windowMs: 60_000 });
-
-/// How long one wallet must wait between replacing its own live plan.
-const SUPERSEDE_COOLDOWN_MS = Number(process.env.PACT_SUPERSEDE_COOLDOWN_MS ?? 15_000);
 
 /// `pact_submit` carries signed transactions, so the ceiling is generous but finite: an unbounded
 /// body is a trivial way to exhaust the instance.
@@ -24,6 +19,31 @@ const LIMIT_BYTES = Number(process.env.PACT_MAX_BODY_BYTES ?? 256 * 1024);
 function json(res: ServerResponse, status: number, body: unknown, headers: Record<string, string> = {}) {
   res.writeHead(status, { "content-type": "application/json", ...headers });
   res.end(JSON.stringify(body));
+}
+
+/// A refusal that happens before the transport is built still has to reach a client that only
+/// reads server-sent events. Those requests accept `text/event-stream`, and a bare JSON body looks
+/// to them like an empty response — a hang rather than a rate limit. So the same payload goes out
+/// as one JSON-RPC error frame whenever the caller accepts a stream.
+function refuse(
+  res: ServerResponse,
+  status: number,
+  body: { error: string } & Record<string, unknown>,
+  headers: Record<string, string> = {},
+  id: string | number | null = null,
+) {
+  const accept = String(res.req?.headers.accept ?? "");
+  if (accept.includes("text/event-stream")) {
+    const frame = { jsonrpc: "2.0", id, error: { code: -32000, message: body.error, data: body } };
+    res.writeHead(status, {
+      "content-type": "text/event-stream",
+      "cache-control": "no-store",
+      ...headers,
+    });
+    res.end(`event: message\ndata: ${JSON.stringify(frame)}\n\n`);
+    return;
+  }
+  json(res, status, body, headers);
 }
 
 async function readBody(req: IncomingMessage): Promise<string> {
@@ -44,9 +64,11 @@ function addressOf(body: unknown): string | null {
   return typeof candidate === "string" && /^0x[0-9a-fA-F]{40}$/.test(candidate) ? candidate.toLowerCase() : null;
 }
 
-function toolOf(body: unknown): string | null {
-  const name = (body as { params?: { name?: unknown } })?.params?.name;
-  return typeof name === "string" ? name : null;
+/// The JSON-RPC id of the call, so a refusal sent as an event frame answers the request the client
+/// is waiting on instead of arriving untagged.
+function requestIdOf(body: unknown): string | number | null {
+  const id = (body as { id?: unknown })?.id;
+  return typeof id === "string" || typeof id === "number" ? id : null;
 }
 
 /// Stateless streamable HTTP: every POST is a complete MCP exchange, so any instance can serve any
@@ -94,14 +116,14 @@ const httpServer = createServer(async (req, res) => {
   }
 
   if (req.method !== "POST") {
-    json(res, 405, { error: "use POST for the MCP endpoint" }, { allow: "POST" });
+    refuse(res, 405, { error: "use POST for the MCP endpoint" }, { allow: "POST" });
     return;
   }
 
   const ip = clientIp(new Headers(req.headers as Record<string, string>));
   const ipVerdict = perIp.take(ip);
   if (!ipVerdict.allowed) {
-    json(
+    refuse(
       res,
       429,
       { error: "too many requests from this address", retryAfterMs: ipVerdict.retryAfterMs },
@@ -114,7 +136,7 @@ const httpServer = createServer(async (req, res) => {
   try {
     body = await readBody(req);
   } catch (error) {
-    json(res, 413, { error: String(error) });
+    refuse(res, 413, { error: String(error) });
     return;
   }
 
@@ -122,7 +144,7 @@ const httpServer = createServer(async (req, res) => {
   try {
     parsed = JSON.parse(body);
   } catch {
-    json(res, 400, { error: "body is not JSON" });
+    refuse(res, 400, { error: "body is not JSON" });
     return;
   }
 
@@ -130,30 +152,14 @@ const httpServer = createServer(async (req, res) => {
   if (address) {
     const verdict = perAddress.take(address);
     if (!verdict.allowed) {
-      json(
+      refuse(
         res,
         429,
         { error: `too many requests for ${address}`, retryAfterMs: verdict.retryAfterMs },
         { "retry-after": String(Math.ceil(verdict.retryAfterMs / 1000)) },
+        requestIdOf(parsed),
       );
       return;
-    }
-
-    if (toolOf(parsed) === "pact_plan") {
-      const cool = supersede.cooldown(`plan:${address}`, SUPERSEDE_COOLDOWN_MS);
-      if (!cool.allowed) {
-        json(
-          res,
-          429,
-          {
-            error: `a plan for ${address} was replaced less than ${Math.round(SUPERSEDE_COOLDOWN_MS / 1000)}s ago`,
-            retryAfterMs: cool.retryAfterMs,
-            hint: "only one plan is live per address; submit the one you have, or wait out the cooldown",
-          },
-          { "retry-after": String(Math.ceil(cool.retryAfterMs / 1000)) },
-        );
-        return;
-      }
     }
   }
 
@@ -173,7 +179,7 @@ const httpServer = createServer(async (req, res) => {
     await transport.handleRequest(req, res, parsed);
   } catch (error) {
     console.error("mcp request failed", error);
-    if (!res.headersSent) json(res, 500, { error: "internal error" });
+    if (!res.headersSent) refuse(res, 500, { error: "internal error" }, {}, requestIdOf(parsed));
   }
 });
 
@@ -183,6 +189,6 @@ httpServer.listen(config.port, () => {
   console.log(`  escrow    ${config.escrow}`);
   console.log(`  registry  ${config.names}`);
   console.log(`  keys held none`);
-  console.log(`  limits    ${LIMIT_BYTES}-byte bodies, ${SUPERSEDE_COOLDOWN_MS}ms plan supersede cooldown`);
+  console.log(`  limits    ${LIMIT_BYTES}-byte bodies, one pending plan per wallet`);
   console.log(`  sessions  signed with SESSION_SECRET (must match the web app)`);
 });
