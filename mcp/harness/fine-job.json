@@ -1,0 +1,7 @@
+{
+  "title": "Fix the broken pagination on a docs page",
+  "description": "The pagination control on our docs page skips page 2. Fix it so every page is reachable, and nothing else changes.",
+  "criteria": "Every page from 1 to the last is reachable in one click from any page. No other behaviour changes.",
+  "proofSpec": "Paste the diff and a one-line note on how you checked it.",
+  "category": "code"
+}

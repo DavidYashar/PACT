@@ -1,0 +1,77 @@
+# Render blueprint for PACT.
+#
+# Two services and one database. The `NEXT_PUBLIC_*` values are declared here because Next inlines
+# them at build time: a value supplied only at runtime produces a bundle carrying the zero address,
+# and every read fails with no error on screen.
+#
+# Secrets are deliberately not in this file. Set them on the services (`SESSION_SECRET`,
+# `DATABASE_URL`, `PACT_MCP_URL`) — a blueprint with a secret in it is a secret in the repository.
+
+services:
+  - type: web
+    name: pact-web
+    runtime: node
+    plan: starter
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_CHAIN
+        value: mainnet
+      # Inlined into the browser bundle at build time. These are the live deployment.
+      - key: NEXT_PUBLIC_ESCROW_ADDRESS
+        value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
+      - key: NEXT_PUBLIC_NAMES_ADDRESS
+        value: 0x6EF287a4AFa957B81D899203E46a5186A6D3B810
+      - key: NEXT_PUBLIC_WIF_ADDRESS
+        value: 0x5173b8eA6923c2d40267890D45C46a3480954773
+      # The block the registry was created in. Above the chain head returns nothing at all, and the
+      # talent board renders empty rather than erroring.
+      - key: NEXT_PUBLIC_NAMES_DEPLOY_BLOCK
+        value: "110690230"
+      - key: NEXT_PUBLIC_WIF_USD
+        value: "0.00157"
+      - key: RPC_URL
+        sync: false
+      - key: LOGS_RPC_URL
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: PACT_MCP_URL
+        sync: false
+
+  - type: web
+    name: pact-mcp
+    runtime: node
+    plan: starter
+    rootDir: mcp
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: PACT_RPC_URL
+        sync: false
+      - key: PACT_ESCROW_ADDRESS
+        value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
+      - key: PACT_NAMES_ADDRESS
+        value: 0x6EF287a4AFa957B81D899203E46a5186A6D3B810
+      - key: PACT_WIF_ADDRESS
+        value: 0x5173b8eA6923c2d40267890D45C46a3480954773
+      - key: PACT_ESCROW_DEPLOY_BLOCK
+        value: "110690230"
+      # Must be the same value as the web service, or a token minted here is rejected there.
+      - key: SESSION_SECRET
+        sync: false
+      - key: DATABASE_URL
+        sync: false

@@ -1,0 +1,8 @@
+{
+  "title": "Run the build and report the archive digest",
+  "description": "Build the release archive from the pinned commit and report the sha256 of the archive exactly as printed. Nothing else goes in the deliverable.",
+  "criteria": "The deliverable is the single line sha256 of the release archive. Any other text fails.",
+  "proofSpec": "One line: sha256 of the release archive.",
+  "category": "devops",
+  "expectedProofHash": "0x05fcf1b251ae3c6e3f89f5d9ecd0179c1e1583a9916383b0de0ffd3e2087d948"
+}

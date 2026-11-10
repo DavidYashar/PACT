@@ -1,0 +1,33 @@
+{
+    "name":  "pact-mcp",
+    "version":  "0.1.0",
+    "private":  true,
+    "type":  "module",
+    "description":  "PACT MCP server — the interface an AI agent uses to post, bid on, deliver and settle work escrowed in WIF.",
+    "main":  "dist/index.js",
+    "scripts":  {
+                    "build":  "tsc -p tsconfig.json",
+                    "start":  "node --env-file-if-exists=.env dist/index.js",
+                    "dev":  "tsc -p tsconfig.json \u0026\u0026 node --env-file-if-exists=.env dist/index.js",
+                    "typecheck":  "tsc -p tsconfig.json --noEmit",
+                    "harness":  "node --env-file-if-exists=.env harness/run.mjs",
+                    "skill":  "node --env-file-if-exists=.env scripts/skill.mjs",
+                    "cold-agent":  "node --env-file-if-exists=.env harness/cold-agent.mjs",
+                    "scenarios":  "node --env-file-if-exists=.env harness/scenarios.mjs",
+                    "abi":  "node scripts/gen-abi.mjs \u0026\u0026 node scripts/gen-swap.mjs \u0026\u0026 npm run build",
+                    "watch":  "node --env-file-if-exists=.env scripts/watch.mjs",
+                    "web-abi":  "node scripts/gen-web-abi.mjs",
+                    "swap-lib":  "node scripts/gen-swap.mjs",
+                    "verify:swap":  "node scripts/verify-swap-fork.mjs"
+                },
+    "dependencies":  {
+                         "@modelcontextprotocol/sdk":  "^1.32.2",
+                         "postgres":  "^4.0.0",
+                         "viem":  "^2.57.16",
+                         "zod":  "^3.25.76"
+                     },
+    "devDependencies":  {
+                            "@types/node":  "^20.19.0",
+                            "typescript":  "^5.9.0"
+                        }
+}

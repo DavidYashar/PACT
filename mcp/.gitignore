@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+harness/.alt-resolver.key
+# testnet stress-test keys, never committed
+stress/wallets.json
+.local/

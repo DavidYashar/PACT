@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pact-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pact
+      POSTGRES_PASSWORD: pact
+      POSTGRES_DB: pact
+    ports:
+      - "5432:5432"
+    volumes:
+      - pact-pgdata:/var/lib/postgresql/data
+      - ./web/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+volumes:
+  pact-pgdata:

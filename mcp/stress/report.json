@@ -1,0 +1,1803 @@
+{
+  "ranAt": "2026-11-09T19:57:25.179Z",
+  "chainId": 46630,
+  "escrow": "0xb867981257a41A525f592E9DEaf9a6B60Ad13dA2",
+  "registry": "0x0c2F4A496Ad68387080aA209DE5556DC7AEd0795",
+  "passed": 41,
+  "failed": 0,
+  "transactions": 131,
+  "cases": [
+    {
+      "id": 1,
+      "title": "human pays human, approved",
+      "pairing": "h1/h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x06d30b50438e82b2821c4ef7c692cfce855ce90d62a262f57419ead46c511b06",
+        "0x05129f37300e19a9031b7e10f5ebf5d4cb9e57fcaec2b69d9acaeb956df3d506"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "human pays human, approved",
+      "pairing": "h3/h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0xdc22b4d07cfc605a230d507d26ce3f7db3ddf6824b8cdc5e4862f7525c4897eb",
+        "0xdbb0d181e5cd9df4661e22f2024cbc7007bb87e09ff4aad21b3c856c0f997ebb"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "agent pays agent, approved",
+      "pairing": "a1/a2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "2450000000000000000000",
+          "actual": "2450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x7017b770e9f3ef93e92246d3f4f3b371359b7fb0a6a4f66c7af9f1eee904d155",
+        "0xe771b5ead21acf253cb0953b59260b3ceec5b77c0221501450b9de465ba620ab"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "agent pays agent, approved",
+      "pairing": "a3/a1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1850000000000000000000",
+          "actual": "1850000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x3e339ae63fdb0444e45ccbb6c4d10ebd673f58dab1e66c3d497101daef70eec8",
+        "0x318cdbd8126024ef82ffce210ddfd805a5b8ca50b0dc6a6d74bf29158952b8f3"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "human pays agent, approved",
+      "pairing": "h2/a1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x8a393dbc472a2a7b717c6a13efb49a50d193c663c6bac78d42f2be06b79934c4",
+        "0xfe8fbc8e7f947240698c31799f66d10e50c9f5e9f2bd6e57e38f99a37c7d659b"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "agent pays human, approved",
+      "pairing": "a2/h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x2f08a2f417ddd8d3c151423d208961ca4d7ff8e558dc6d15f8a77b057fa0e10e",
+        "0x27c13a12614b8a8eefeeca8e3831152094659fb5fe9852d1fdb019574aca2a44"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "agent pays human, approved",
+      "pairing": "a3/h3",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "2450000000000000000000",
+          "actual": "2450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x52eb8cfe7eef0c1ac9644b61c6597fa4584813da79c38bdd7221d568ef11b5b3",
+        "0xe3fc5e4c0a95aa2bc429fa6693517076d147929f3f927aa29b326bedbb7ab9d6"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "human cancels an unbid job: full budget back, no cut",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "CANCELLED",
+          "actual": "CANCELLED",
+          "ok": true
+        },
+        {
+          "name": "claimable equals the budget, with no cut taken",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 9,
+      "title": "worker abandons: employer gets the bond less the cut",
+      "pairing": "a2/h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 10,
+      "title": "worker abandons: employer gets the bond less the cut",
+      "pairing": "h3/a3",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the claim transferred exactly what was owed",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 11,
+      "title": "worker files and wins: fee off the bond, price released",
+      "pairing": "h1/a2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "workerWon",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "this job credited the employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "this job credited the worker",
+          "expected": "1350000000000000000000",
+          "actual": "1350000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 12,
+      "title": "worker files and loses: fee and fine off the bond",
+      "pairing": "h2/h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "workerWon",
+          "expected": "false",
+          "actual": "false",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "this job credited the employer",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "this job credited the worker",
+          "expected": "350000000000000000000",
+          "actual": "350000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 13,
+      "title": "employer files and wins: price back plus the fine",
+      "pairing": "a1/h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "workerWon",
+          "expected": "false",
+          "actual": "false",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "this job credited the employer",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "this job credited the worker",
+          "expected": "450000000000000000000",
+          "actual": "450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 14,
+      "title": "employer files and loses: pays the price and its own fee",
+      "pairing": "h3/a1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "workerWon",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "this job credited the employer",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "this job credited the worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 15,
+      "title": "a bid above the budget is refused",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "PriceTooHigh",
+          "actual": "PriceTooHigh",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 16,
+      "title": "an employer cannot bid on its own job",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "SelfJob",
+          "actual": "SelfJob",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 17,
+      "title": "accepting a bid that does not exist is refused",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "BidUnavailable",
+          "actual": "BidUnavailable",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 18,
+      "title": "withdrawing an out-of-range bid reverts, rather than panicking",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "BidUnavailable",
+          "actual": "BidUnavailable",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 20,
+      "title": "a second live bid from one wallet is refused",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "AlreadyBid",
+          "actual": "AlreadyBid",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 21,
+      "title": "a delivery deadline before the bid deadline is refused",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "BadDeadline",
+          "actual": "BadDeadline",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 22,
+      "title": "an auto-release window under a minute is refused",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "DelayOutOfRange",
+          "actual": "DelayOutOfRange",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 23,
+      "title": "an accepted job cannot be cancelled",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "WrongState",
+          "actual": "WrongState",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 24,
+      "title": "a job that was never delivered cannot be approved",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "WrongState",
+          "actual": "WrongState",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 25,
+      "title": "a stranger cannot file a ticket",
+      "pairing": "h3",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "NotParty",
+          "actual": "NotParty",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 26,
+      "title": "a non-resolver cannot rule",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "NotResolver",
+          "actual": "NotResolver",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 27,
+      "title": "a fine above the cap is refused",
+      "pairing": "resolver",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "FineTooHigh",
+          "actual": "FineTooHigh",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 28,
+      "title": "auto-release cannot touch a disputed job",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "WrongState",
+          "actual": "WrongState",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 29,
+      "title": "the ticket timeout cannot fire early",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "NotYetReleasable",
+          "actual": "NotYetReleasable",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 30,
+      "title": "the ticket froze the job and stored the filer's commitment",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "DISPUTED",
+          "actual": "DISPUTED",
+          "ok": true
+        },
+        {
+          "name": "reasonHash on the job equals what was filed",
+          "expected": "0xd22ba2f5c26069bdb74740bf6cd2bda72537f7f337ee89e9c1a90344f6a36333",
+          "actual": "0xd22ba2f5c26069bdb74740bf6cd2bda72537f7f337ee89e9c1a90344f6a36333",
+          "ok": true
+        },
+        {
+          "name": "the timeout clock started",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 19,
+      "title": "bid and withdraw in a loop leaves the bid list at one entry",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "bid count",
+          "expected": "1",
+          "actual": "1",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 31,
+      "title": "an unregistered wallet cannot post",
+      "pairing": "anon",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "NotRegistered",
+          "actual": "NotRegistered",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 32,
+      "title": "an unregistered wallet cannot bid",
+      "pairing": "anon",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "NotRegistered",
+          "actual": "NotRegistered",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 33,
+      "title": "claiming before the record is written is refused",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "RecordPending",
+          "actual": "RecordPending",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 34,
+      "title": "a claim pays the whole balance once, and a second claim is refused",
+      "pairing": "h2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "claimable emptied by the claim",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "the transfer matched what was owed",
+          "expected": "2900000000000000000000",
+          "actual": "2900000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "guard on the second claim",
+          "expected": "ZeroAmount",
+          "actual": "ZeroAmount",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 35,
+      "title": "a settled job cannot be approved twice",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "WrongState",
+          "actual": "WrongState",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 36,
+      "title": "anyone may release a delivered job once the silence window passes",
+      "pairing": "a1/h3",
+      "ok": true,
+      "checks": [
+        {
+          "name": "released before the window",
+          "expected": "NotYetReleasable",
+          "actual": "NotYetReleasable",
+          "ok": true
+        },
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "the worker wins by default",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x105c22eae43aa888f483097cc7d003cf08863ec538bffbfaa81301fca3244907"
+      ]
+    },
+    {
+      "id": 37,
+      "title": "a worker who vanishes can be reclaimed by anyone after the grace",
+      "pairing": "h2/a3",
+      "ok": true,
+      "checks": [
+        {
+          "name": "reclaimed inside the grace",
+          "expected": "JobNotStale",
+          "actual": "JobNotStale",
+          "ok": true
+        },
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "paid to employer",
+          "expected": "1450000000000000000000",
+          "actual": "1450000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "paid to worker",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0xe6e2b44b2c830e579bf5bbde61cb4d4c4cd5efb7fec5b3f09cfb0b2c87da8cf3"
+      ]
+    },
+    {
+      "id": 38,
+      "title": "the timeout cannot fire before it expires",
+      "pairing": "h3/a1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "NotYetReleasable",
+          "actual": "NotYetReleasable",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 40,
+      "title": "a settled job cannot be written into the record twice",
+      "pairing": "h1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "guard",
+          "expected": "AlreadyRecorded",
+          "actual": "AlreadyRecorded",
+          "ok": true
+        }
+      ],
+      "txs": []
+    },
+    {
+      "id": 41,
+      "title": "an undecided ticket is settled by the clock and marks nobody",
+      "pairing": "h3/a1",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "SETTLED",
+          "actual": "SETTLED",
+          "ok": true
+        },
+        {
+          "name": "flagged as a timeout",
+          "expected": "true",
+          "actual": "true",
+          "ok": true
+        },
+        {
+          "name": "nobody won",
+          "expected": "false",
+          "actual": "false",
+          "ok": true
+        },
+        {
+          "name": "the employer's price came back",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        },
+        {
+          "name": "the worker's bond came back less the filing fee",
+          "expected": "400000000000000000000",
+          "actual": "400000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0xd35bc6edd295e5b06e8d5ebba84516383e916e1cd7df4297a60c61cbd28b34e9"
+      ]
+    },
+    {
+      "id": 42,
+      "title": "anyone may reclaim an open job nobody ever bid on",
+      "pairing": "a2",
+      "ok": true,
+      "checks": [
+        {
+          "name": "state",
+          "expected": "CANCELLED",
+          "actual": "CANCELLED",
+          "ok": true
+        },
+        {
+          "name": "the budget became claimable to the employer",
+          "expected": "1000000000000000000000",
+          "actual": "1000000000000000000000",
+          "ok": true
+        }
+      ],
+      "txs": [
+        "0x29cc7468077ceb504f3ebdfd2c87d9d1e15a2b41c1dcb4fde3fd98defa4924b3"
+      ]
+    }
+  ],
+  "transactionsDetail": [
+    {
+      "who": "h1",
+      "functionName": "approve",
+      "hash": "0x949621eb6699289e5dee928ff85eea66363d48ee0c1b6747eb215e41c991b33f",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "approve",
+      "hash": "0x08cc046b5577f92521f9d322bf31846ef09d9ef98b75e6f1c7ce7e202bf5dff0",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "approve",
+      "hash": "0x4aef692841a02be9add6e405eed384771ba703f9ccbacbd5ea62fc0c8f64a03f",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "approve",
+      "hash": "0x621308476686f0119305f319db1af29a1b6dff20b49c84023adf450a9d93f1e5",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "approve",
+      "hash": "0xb0711a0da970d11205a3b7266a90688fee88f18fbc00d1a364140d45a84a8f42",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "approve",
+      "hash": "0x4da03ada4dadd965c72d7b372a1ce3f18c522bee2595e64bafa35043170d3c99",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "record",
+      "hash": "0x3ee51d22ab2e8407165443df704af683203c80512fe546bee4a543d6b9e45aca",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0xed6a1e196d57c9cf45a1e719830f2f58352e1b76bacc8dedc25dac52f5ca4074",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0x95255a256c0979eb50edc4b9b6acab5ac292c9323253e4c1845fbdc4c0a29f4b",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "acceptBid",
+      "hash": "0x6bb37610837685ec39bca44e85b8f4c7e6ff271e604576c156b4eee27a921fca",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "submitDelivery",
+      "hash": "0x931a2e6276bf0a17cf0ab9dab550592b9917daa65787ca83f8396686f7490b7d",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "approveDelivery",
+      "hash": "0x527f798d379ab3242b8ca54e552cea5f86e75ab26bbbb8e72fa21095b7979805",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "record",
+      "hash": "0x06d30b50438e82b2821c4ef7c692cfce855ce90d62a262f57419ead46c511b06",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "claim",
+      "hash": "0x05129f37300e19a9031b7e10f5ebf5d4cb9e57fcaec2b69d9acaeb956df3d506",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "postJob",
+      "hash": "0x1e22f441c206f41253e0c2cf1064e8550a586c7baa11103fbf4151949aca58ed",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "bid",
+      "hash": "0x65f5b7716e52e69ba7e919f39d0652731717f36d5707fe40548a6fbd06ff6325",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "acceptBid",
+      "hash": "0x5ef6bf02295fe4637894cfb229cd157d90a7c9fc9fc42d9c86e53e8a9454fa31",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "submitDelivery",
+      "hash": "0x7b6e2a0e40be1a099a1b536d6ffc63e225c735309730550dea1c86addc41b63c",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "approveDelivery",
+      "hash": "0xcf14fd340146d169a4176bee7d32fb968add02c771da77321eaf6dbcf7e3b261",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "record",
+      "hash": "0xdc22b4d07cfc605a230d507d26ce3f7db3ddf6824b8cdc5e4862f7525c4897eb",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "claim",
+      "hash": "0xdbb0d181e5cd9df4661e22f2024cbc7007bb87e09ff4aad21b3c856c0f997ebb",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "postJob",
+      "hash": "0xc5c9075d98749e5e46730b1e0b3462096d21668be65b85f11910d24fa5aa6142",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "bid",
+      "hash": "0x8842edceafc5be733b0a7739976b76857d8ad2e653487b38075dd1a6a4a0304d",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "acceptBid",
+      "hash": "0xf00627aa3a637f72e5e525a823a32188dccdb6410856feed0ede31061fd336cc",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "submitDelivery",
+      "hash": "0x200c65526592c093b2da997f052f7423bbd75dd716a368bcc205ea4947aba572",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "approveDelivery",
+      "hash": "0xe71391cfb6c31a670e321b8ba72e3a52bd807e791882f62893b8111d5535ad1a",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "record",
+      "hash": "0x7017b770e9f3ef93e92246d3f4f3b371359b7fb0a6a4f66c7af9f1eee904d155",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "claim",
+      "hash": "0xe771b5ead21acf253cb0953b59260b3ceec5b77c0221501450b9de465ba620ab",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "postJob",
+      "hash": "0x3b2536c392694638d6af8e3fc53160e2eb8c7be5793da6a04b395dbf5c63e1c8",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "bid",
+      "hash": "0x0f46190b8add4f70cf75ba2b5101db48715e0613fa472dd5f95a4e6b03f0be1e",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "acceptBid",
+      "hash": "0x7f3d792842d340659429f06605837d99d1953112d9d1908a3d16a860d18441f1",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "submitDelivery",
+      "hash": "0x3367b8b12b4a6adcb50553694576fdd53f572f7ca627a5807e33497c1bdba7df",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "approveDelivery",
+      "hash": "0x456d4e721ba69b1cc74163e491a11a84fa4cae84c4b6e91119e31ec538c03b3c",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "record",
+      "hash": "0x3e339ae63fdb0444e45ccbb6c4d10ebd673f58dab1e66c3d497101daef70eec8",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "claim",
+      "hash": "0x318cdbd8126024ef82ffce210ddfd805a5b8ca50b0dc6a6d74bf29158952b8f3",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "postJob",
+      "hash": "0x47f366adbcbb6feba446c723612170fd855eb225b6326560cad6d33bdd3ff994",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "bid",
+      "hash": "0x6579a29aac6005fddf76a13417c531a7abc4f78dc85d5e338faf0d65a56dee8b",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "acceptBid",
+      "hash": "0xab27d54344571948101a6ea169b063883bf68292c77019efd4e72a76001efde2",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "submitDelivery",
+      "hash": "0xf800cd3cd799fd1cb6379d52398eeb0b67e666525b9c4890960685e75b4e4f8e",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "approveDelivery",
+      "hash": "0x92991024b672a5ebfdde1caccdc18d719125d49d2c8d5c6828b888ac6c43682f",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "record",
+      "hash": "0x8a393dbc472a2a7b717c6a13efb49a50d193c663c6bac78d42f2be06b79934c4",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "claim",
+      "hash": "0xfe8fbc8e7f947240698c31799f66d10e50c9f5e9f2bd6e57e38f99a37c7d659b",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "postJob",
+      "hash": "0x0b2da627e7beb07bd4269e757099bb618297f3ae9ba69d28d115c0e659f6c940",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0xdeec01fe2f8b21d5f3d00f0ea76ab7c972c848fe0d81895e872597013bd71576",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "acceptBid",
+      "hash": "0x846357d16d00585e14d3ff5285ee753ac14a25be15b6c801caf9624bfc160400",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "submitDelivery",
+      "hash": "0xda55beb57598adb800dca38cd5135b8a0e4ff8f7f1dc1a48692186489718aea6",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "approveDelivery",
+      "hash": "0xcf6e7efe56abc5c65960549f46fbfd85243d6bf4342c9173fb91719070c70c11",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "record",
+      "hash": "0x2f08a2f417ddd8d3c151423d208961ca4d7ff8e558dc6d15f8a77b057fa0e10e",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "claim",
+      "hash": "0x27c13a12614b8a8eefeeca8e3831152094659fb5fe9852d1fdb019574aca2a44",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "postJob",
+      "hash": "0xcbd8b688395abc3266d392f4f9b0ec37782713f42a58e17075536d1723f8933a",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "bid",
+      "hash": "0xdc9a08da6fee5c3e080af14d5a696f18abb0fb3af5856d389751fb0488013856",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "acceptBid",
+      "hash": "0x6d13938dbad3fea02b8c5dff7f5e2148e378ee916753a78c33fc315486a0b89c",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "submitDelivery",
+      "hash": "0xc5f77a2b025373f6cf696386dc51d49a87626f6bb33d67b17fb09fdc3fe24bdd",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "approveDelivery",
+      "hash": "0x3245a36fe40a5732b88d904217ab7d81fb67d64a87cffb7b3df88bd56b465aa8",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "record",
+      "hash": "0x52eb8cfe7eef0c1ac9644b61c6597fa4584813da79c38bdd7221d568ef11b5b3",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "claim",
+      "hash": "0xe3fc5e4c0a95aa2bc429fa6693517076d147929f3f927aa29b326bedbb7ab9d6",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0x12742030ff41a7886c38579332fc929ac5c89bf306b70bf5cc25f2b3f828a12a",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "cancelJob",
+      "hash": "0x81eafaed58e2f5489129fc7469bb71f9cdd8881446e4ffd43002ad9053e4732a",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "claim",
+      "hash": "0x23b16f69508c806a734f999341b5eb7a1d3709e11b15bb73af0768f57c1e036a",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "postJob",
+      "hash": "0xc0ba3c26ec17ea51bcbdf65c830bb3a02a0ef893ec34b28fb4d661f33e3e176f",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "bid",
+      "hash": "0xabe472d192615fc846049f9dd40d4e69d0bf219a0a2a3491b93691926639d8b9",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "acceptBid",
+      "hash": "0xc486aa746fc588f4c8663170b3fae5b5055f4190fbd65803d5b01c94aadc31fc",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "abandonJob",
+      "hash": "0xc8cb12190c33dbc8e51c55853ff8fd9bd5a45a31001578936701768a0c3f22b3",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "record",
+      "hash": "0xf2ca899e4c1a081b8eb386ddce7d119aafc5f44a1907be092610d9e2ecd7ca12",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "claim",
+      "hash": "0x2ca967444e830412b841dac8bb54dc3da39866b67aff8e51b9afde765ee0168d",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "postJob",
+      "hash": "0x48af22316c0ac3e650b02df4f1bc19e2d6d4cec8f43bbb4238554548ffc78c91",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "bid",
+      "hash": "0x47bf2455e3469be42e2c25581244861fdc588328ffcadbc1957ef161fb194074",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "acceptBid",
+      "hash": "0xfd56494c63218032130eabc5d065fb57fcb657d01d821d524ccfdaafa9827bf4",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "abandonJob",
+      "hash": "0x2cb6541aa2fe035072a71e6d341facd6db5ffa1d0ce3b2ccb219f91807405d66",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "record",
+      "hash": "0x9faade9cb91313dc46c0b4da80ca3416e50912df754c2290067a03fb9ab159a0",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "claim",
+      "hash": "0x26d18711c6e04df00d8d751e3f8062fac1189d8bfe6e346ad5363d34184e19f3",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0x7aedd7e81860349686f3046197640c6970849c15a3dbb6c711cdf0b91ff72d4a",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "bid",
+      "hash": "0xb487418f033c51dac437baa1276288e4e02cb2011cf13135d400579004e9fa56",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "acceptBid",
+      "hash": "0x2ddceee73a77a0ca92084e138ad3eb8e9a35be14bf59dd9456d2fa7b0aa57083",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "raiseDispute",
+      "hash": "0x23137d1c2bd92a2192bd03649a989a55786258966193b96e5eddd711aa8b249b",
+      "status": "success"
+    },
+    {
+      "who": "resolver",
+      "functionName": "resolveDispute",
+      "hash": "0x9fc19aa065c4c971fce257a65a59c8beb17d4570d72b83b076a7d07f0310845d",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "record",
+      "hash": "0x4365fe40de1064b79839e94396229aa4b73cd45d814d28a4c0c54e4a22d7477c",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "postJob",
+      "hash": "0xf3565cec6dc1c7efe9f6af2391c6e320fc05d13d2f7086d8fdae911ba00f552a",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "bid",
+      "hash": "0xd4f9f0ee1db60acc655e06b54d931548aa37edeb84600d5b3a8ace105d3b586e",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "acceptBid",
+      "hash": "0x240e7c69358f049f8028a5e22d858c5c77b9b267bfc5382cbe2a10dd1e8ee21d",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "raiseDispute",
+      "hash": "0xd077a54bd932496085f5edf0fd08b8974a5bd0c45fac82c2ce778c03d078c615",
+      "status": "success"
+    },
+    {
+      "who": "resolver",
+      "functionName": "resolveDispute",
+      "hash": "0xbe3697329d1e13c3a9632b0906693826f69371448182f7c0e74dfc457f8525f9",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "record",
+      "hash": "0x75b714519bf47c856380ae1c8aea42b153a88c7326f0a2ea68e9ac393dd9f724",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "postJob",
+      "hash": "0xc501e38236cf5b635cec68b1fe0a28b81d15abe73211be61d28fd4b837e09166",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0x69e657ca8657112d916e5cefe49e9f0400d1dceffdb7adb0e58a8fd2b9609a19",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "acceptBid",
+      "hash": "0x5c388d190e289e5b3ccea5945a08f186dcc2fdd55c3549ab7a2ac2ebb8321cc2",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "submitDelivery",
+      "hash": "0xa3f663fd4f0b6ef5e716e3ff7cc5583951c433f1767553a165c3c66b57d1f6fa",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "raiseDispute",
+      "hash": "0x868130802516b17ab3065420489fb4196d60ad2eb41c2647074041ffde8735a0",
+      "status": "success"
+    },
+    {
+      "who": "resolver",
+      "functionName": "resolveDispute",
+      "hash": "0x41e76696167edf672e094d3c39c094281df714c38bd686e9944226269ac56211",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "record",
+      "hash": "0x70681823456c67cf8f9225753be5bedae3b28bc1801b0cc93b2507d96a8685a0",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "postJob",
+      "hash": "0xfe069981e10911d6f9fbe7be1c9a720198690d77495775cfd70374d19a31ff78",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "bid",
+      "hash": "0x50b6be8ad04c14f57c303996b6892372dd29afaebd2a5b204c4fccba1fab25c8",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "acceptBid",
+      "hash": "0x3536f306a5dfe748ed285ab9327f15c8482f15108588030aeea92ab0b4d49a40",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "submitDelivery",
+      "hash": "0x94db7b125c825797982b4962c26efeb042f71e6085939a626d277fcedee038dc",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "raiseDispute",
+      "hash": "0x4df4ad648d247aa24b7e16554c9ebb4aea2cbbce0f5e67116346cf491fc9242a",
+      "status": "success"
+    },
+    {
+      "who": "resolver",
+      "functionName": "resolveDispute",
+      "hash": "0xb29bd414c967a6d9d4f73f8470f9fd8e4dd652e87b15c43a1477cd7a615138d3",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "record",
+      "hash": "0x4d4939b434852d275e044d4049fa14ec3dcc46e7f54da4cac3e67419eb8dc88c",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0x410ddf5dcd2c1b39ec2e552e608ab9beb3fd25928e0b4bbb7509848bad1b98cb",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0x8078fd9d9a86e0662057cb02f845b2fbe016c894f5590689b192338dbb81ef40",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "acceptBid",
+      "hash": "0xaf262e4d8a467eaf1467745b7c2d76bdf608c5bc4c63d0f5442f82b62c52a687",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "raiseDispute",
+      "hash": "0x301130fc8d22fbdd45a2325f2c3e84ac0401896e48d4ca304e44abdd57d31c75",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0xb827c58186d98026d148ad8df853a183a7cdd971f1d3e1f2e424a890cea444a7",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0x184ec80c5f80871bc7f0e64eed1a0a52c92e58e5bf3fb095398e4b8f6269c5ab",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "withdrawBid",
+      "hash": "0x869f6468e148d6354dca4cae6a57607bfdf5f74a4ec566989b2bee6e68be129c",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0xeb02b4ed13cd9f1f544ce866d0b59a5b3a2e03240eea5c274f1ae03b6aad000e",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "withdrawBid",
+      "hash": "0x8861857ea1f1d111dd472e241183486c8e9e6778cff6ef1376da485bb17b518c",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0x054adae774e17c4e7ef1ce1d6dc62c5ad1993bd7d888605c1ac04386f5abd627",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0x0383fef5a6107cdf7024222871ad200c630fd3eaa2716cdb9c9719831a4e7b49",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "postJob",
+      "hash": "0xc2941647ecfc6fd9d749dcf3860b9e7fee1f9a4097e5281f66a58357b9e2481e",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "bid",
+      "hash": "0x04ac82ff641570651e675f7f4bee8c24189857dff04ab41fb725196dee3ead60",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "acceptBid",
+      "hash": "0x816419461e9142f7da7c6af7449f4976794019aa12a7aa2caed586847e61716f",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "submitDelivery",
+      "hash": "0x5691e2e3913e6938aff60ef755abf2d8f982b2e3b1b253596942ff3987f684b1",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "approveDelivery",
+      "hash": "0xd3bf6f596793e73588d06655a1f6ced4ae83e258ea4d0183d86114cbdb7ad8f3",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "record",
+      "hash": "0x5a97238c3f548c47c0ac19e227b00356aacd6d252278805be3f010afd4e6c516",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "claim",
+      "hash": "0xad5309df69ddd8a4221795dbe414f680c5c4b80011b85e73adcaf5b64eaa5123",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "postJob",
+      "hash": "0x0b43d01f304346f79b92468c8688ce18a13135840bbf1d3816f5fe505b34dedd",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "bid",
+      "hash": "0x715a63398e0a6110510834439a97768ee01cba4fb5e7a818b249389a82f329f9",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "acceptBid",
+      "hash": "0xeb827965adfadcd8db7817f905e12e763f531ab2b00571a78b3ca205856385da",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "submitDelivery",
+      "hash": "0x4ff56ea56b826e2470f0452b8ba5a141a108ca8f68fe1c6198c99fbcff12d748",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "releaseExpired",
+      "hash": "0x105c22eae43aa888f483097cc7d003cf08863ec538bffbfaa81301fca3244907",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "postJob",
+      "hash": "0x06519654350b1f107a188502cf222492bdd06e2e5bd66a9f9708b3574ee25948",
+      "status": "success"
+    },
+    {
+      "who": "a3",
+      "functionName": "bid",
+      "hash": "0x5e02bc920a7b7511d46bde5839b067f2fa51061454fe8d12667de14ab141ce4c",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "acceptBid",
+      "hash": "0xa4a8197e9806274bfa8cfc26be06a85e2a59e26ddb15a01596e92461bd7e4eb9",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "reclaimAssignment",
+      "hash": "0xe6e2b44b2c830e579bf5bbde61cb4d4c4cd5efb7fec5b3f09cfb0b2c87da8cf3",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "postJob",
+      "hash": "0x3efb3766a682245746f79d627ee23ef3517f4cef4760aa9135f08ea53bfe89b7",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "bid",
+      "hash": "0xaa99eb27ca44a378dc3e0a9d25e0d9471b78fd1464e25ee4f1015a2bec0948b5",
+      "status": "success"
+    },
+    {
+      "who": "h3",
+      "functionName": "acceptBid",
+      "hash": "0x1211dd9a8c2382c62ad67e6be03367d342e574180fa4da7760ad381951cd3942",
+      "status": "success"
+    },
+    {
+      "who": "a1",
+      "functionName": "raiseDispute",
+      "hash": "0x1c4655a2265ce277feddf2374edba3f82ccc04b72d9766d7e03c2693be78155b",
+      "status": "success"
+    },
+    {
+      "who": "a2",
+      "functionName": "postJob",
+      "hash": "0x94c137e34ffa007514d33ddd0e1ac1f4af746d9d6b22a404280aa08960323ae5",
+      "status": "success"
+    },
+    {
+      "who": "h2",
+      "functionName": "timeoutDispute",
+      "hash": "0xd35bc6edd295e5b06e8d5ebba84516383e916e1cd7df4297a60c61cbd28b34e9",
+      "status": "success"
+    },
+    {
+      "who": "h1",
+      "functionName": "cancelExpiredJob",
+      "hash": "0x29cc7468077ceb504f3ebdfd2c87d9d1e15a2b41c1dcb4fde3fd98defa4924b3",
+      "status": "success"
+    }
+  ]
+}

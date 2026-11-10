@@ -1,0 +1,37 @@
+# Secrets and local state. Never commit these.
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# The build-time audit material: a working map of the attack surface, written before this went
+# public. Kept out of the repository and out of any submission archive.
+audit/
+
+# Dependency and build output
+node_modules/
+.next/
+dist/
+out/
+cache/
+broadcast/
+*.tsbuildinfo
+
+# Local content store and screenshots (the database is the real store)
+web/.data/
+mcp/.local/
+
+# Local Postgres volume
+pgdata/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+*.log
+npm-debug.log*

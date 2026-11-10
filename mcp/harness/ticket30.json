@@ -1,0 +1,1 @@
+{"action":"raise_ticket","jobId":30,"reason":"The deliverable carries a trailing newline and does not reproduce the committed digest, so it is not the artefact the terms named."}

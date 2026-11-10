@@ -1,0 +1,473 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Palette. Two neutrals, one surface pair, one accent, two semantic. See DESIGN.md. */
+  --color-bg: #08090a;
+  --color-panel: #0d0f11;
+  --color-panel-2: #121518;
+  --color-line: #1e2227;
+  --color-line-2: #2a2f36;
+  --color-text: #ede9e0;
+  --color-muted: #8a8f98;
+  --color-accent: #c8f751;
+  --color-warn: #ffb86b;
+  --color-danger: #ff6b5e;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-newsreader);
+}
+
+:root {
+  color-scheme: dark;
+  /* Shape ladder: data 2px, controls 8px, panels 16px, pills for status only. */
+  --radius-cell: 2px;
+  --radius-control: 8px;
+  --radius-panel: 16px;
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #08090a;
+}
+
+.mono {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The editorial voice. Claims and page openers only, never a number or a label. */
+.display {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+/* Micro-labels name state and fields. Not section decoration. */
+.label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}
+
+/* The grid is the ledger: hairlines at block scale, faded at the edges so it reads as a surface
+   rather than as a table. Landing hero and job hero only, never behind a data table. */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 30%, transparent 78%);
+}
+
+/* One light source per page, behind the claim. R-13 dose cap: never more than one. */
+.glow-accent {
+  background:
+    radial-gradient(closest-side, color-mix(in oklab, var(--color-accent) 16%, transparent), transparent 70%);
+}
+.glow-soft {
+  background: radial-gradient(closest-side, rgba(140, 160, 190, 0.13), transparent 72%);
+}
+
+/* Panels sit on the page rather than float above it: a lit top edge and a hairline ring, no blur. */
+.panel-sheen {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 42%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* The display scale. The template's most transferable move: type big enough to be the layout. */
+.claim {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  font-size: clamp(2.5rem, 6.4vw, 5.25rem);
+}
+
+/* The same voice at page-title size: a job title can run to twenty words, and the hero scale
+   would turn it into four lines of shouting. */
+.claim-tight {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  font-size: clamp(1.9rem, 3.9vw, 3.25rem);
+}
+
+/* The claim on one line. Sized in vw so the sentence fits the measure at every width; it is
+   measured in the browser rather than guessed, because a clipped claim is worse than a small one. */
+.claim-line {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: clamp(1.05rem, 4.4vw, 4rem);
+}
+
+/* The typing cursor: a bar rather than a pipe character, so it scales with the claim. */
+.tw-cursor {
+  display: inline-block;
+  width: 0.055em;
+  height: 0.72em;
+  margin-left: 0.02em;
+  background: var(--color-accent);
+  transform: translateY(0.06em);
+  animation: tw-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes tw-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Landing section titles: the same editorial voice one step below the claim. Without this the page
+   drops straight from an 84px claim to a 30px card heading, and the middle of the page has no
+   voice of its own. Panel headers stay at UI scale; this is for the landing's section openers. */
+.section-title {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-size: clamp(2.1rem, 3.6vw, 3.25rem);
+}
+
+.lead {
+  font-size: clamp(0.95rem, 1.15vw, 1.0625rem);
+  line-height: 1.65;
+}
+
+.rule {
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* ---------------------------------------------------------------- motion */
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* Three staggered rings leaving a dot while money is in custody. Small radius: this sits beside
+   a label, it is not a background. */
+@keyframes sonar {
+  0% {
+    r: 3px;
+    opacity: 0.7;
+    stroke-width: 1px;
+  }
+  100% {
+    r: 13px;
+    opacity: 0;
+    stroke-width: 0.5px;
+  }
+}
+
+/* Money travelling the payout path: one pass, then it stops, because the payment is done. */
+@keyframes beam {
+  0% {
+    stroke-dashoffset: 420;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.live-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.sonar-ring {
+  animation: sonar 3s linear infinite;
+}
+.sonar-ring-2 {
+  animation-delay: 1s;
+}
+.sonar-ring-3 {
+  animation-delay: 2s;
+}
+
+/* ---------------------------------------------------------------- the chain band */
+
+/* A conveyor along a hill of flat blocks. Nothing here is 3D: each block is a rectangle that scales
+   with its distance from the peak, so the top of the hill reads as the nearest point. */
+
+.cband {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .cband {
+    height: 240px;
+  }
+}
+
+.cblock {
+  --bw: 84px;
+  --bh: 84px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--bw);
+  height: var(--bh);
+  margin-left: calc(var(--bw) / -2);
+  margin-top: calc(var(--bh) / -2);
+  transform: translate3d(var(--x), var(--y), 0);
+}
+
+/* The card scales on its own, so the bits that sit outside it keep their true position. The shadow
+   is built like a physical tile: a lit top edge, a shaded bottom edge, and one cast shadow under
+   it, so the block reads as a solid slab rather than a rectangle drawn on the page. */
+.ccard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(var(--s, 1));
+  border: 1px solid rgba(200, 247, 81, 0.3);
+  background: rgba(200, 247, 81, 0.035);
+  overflow: hidden;
+  padding: 7px 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.6),
+    0 3px 0 rgba(200, 247, 81, 0.14),
+    0 14px 22px -14px rgba(0, 0, 0, 0.9);
+  transition:
+    border-color 700ms,
+    background-color 700ms,
+    box-shadow 700ms;
+}
+
+/* Pending is a pale outline. Confirmed is the block lit green. */
+.cblock[data-confirmed="true"] .ccard {
+  border-color: rgba(200, 247, 81, 0.92);
+  background: rgba(200, 247, 81, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(200, 247, 81, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.45),
+    0 3px 0 rgba(200, 247, 81, 0.38),
+    0 16px 26px -14px rgba(200, 247, 81, 0.3);
+}
+
+.chash {
+  /* Four lines of type, fixed height, so the values sit centred instead of drifting as they arrive. */
+  height: 6.8em;
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 7px;
+  line-height: 1.7;
+  white-space: pre;
+  color: rgba(200, 247, 81, 0.5);
+  transition: color 700ms;
+}
+
+.cblock[data-confirmed="true"] .chash {
+  color: rgba(200, 247, 81, 0.95);
+}
+
+/* The link is carried by the block in front of it. Its transform and width are written by the scene's
+   animation loop every frame, from the same numbers that placed the two blocks. */
+.clink {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 0;
+  transform-origin: 0 50%;
+  /* Hidden until the loop has both endpoints: the first block has no neighbour to connect to. */
+  opacity: 0;
+}
+
+/* The bits fill the link edge to edge: the first starts at the block behind, the last ends at this
+   block. `space-between` spreads the remainder, so a wider gap adds characters instead of gaps. */
+.cbits {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 9px;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(200, 247, 81, 0.7);
+}
+
+@media (max-width: 640px) {
+  .cblock {
+    --bw: 64px;
+    --bh: 64px;
+  }
+
+  .ccard {
+    padding: 5px 6px;
+  }
+
+  .chash {
+    font-size: 6px;
+  }
+}
+/* ---------------------------------------------------------------- the ruling */
+
+/* The section arrives in two pushes: everything in the left column from off the left edge,
+   everything in the right column from off the right, each on a spring so it settles instead of
+   stopping dead. The fallback curve is declared first, the spring second. */
+.ruling-item {
+  transition:
+    transform 1150ms cubic-bezier(0.17, 1.3, 0.35, 1),
+    opacity 420ms ease-out;
+  transition:
+    transform 1200ms
+      linear(
+        0,
+        0.004,
+        0.016 2.5%,
+        0.063 5%,
+        0.35 13%,
+        0.62 22%,
+        0.82 31%,
+        0.93 40%,
+        1 50%,
+        1.04 58%,
+        1.05 64%,
+        1.04 72%,
+        1.02 80%,
+        1.005 88%,
+        1
+      ),
+    opacity 420ms ease-out;
+  transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 85ms);
+  will-change: transform, opacity;
+}
+
+/* Out of view: parked at the edge with no transition, so the next arrival always begins from the
+   edge instead of wherever a reverse animation would have left it. */
+[data-ruling]:not([data-shown="true"]) .ruling-item {
+  opacity: 0;
+  transform: translate3d(calc(var(--side, -1) * 46vw), 0, 0) rotate(calc(var(--side, -1) * 1.4deg));
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-ruling]:not([data-shown="true"]) .ruling-item {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+/* One hover shadow for every action button: two stacked soft shadows, so a button lifts off the
+   page instead of only changing colour. */
+.btn-lift:hover {
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+/* ------------------------------------------------------- reduced motion */
+
+/* Every loop stops and nothing animates, in one rule. R-39. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------- forms */
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #5c626b;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.4);
+}
+
+/* Every enabled control shows it can be used; a disabled one says why before it is clicked. */
+button:not(:disabled),
+[role="button"],
+a[href],
+select:not(:disabled),
+label[for],
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+}
+button:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-2);
+  border-radius: 99px;
+}

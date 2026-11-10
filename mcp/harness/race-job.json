@@ -1,0 +1,7 @@
+{
+  "title": "Write a 200-word product description for a wallet",
+  "description": "One product description, 200 words, plain language, aimed at someone who has never used a self-custody wallet. No jargon, no promises about returns.",
+  "criteria": "Exactly 200 words, no jargon, no claims about profit or safety guarantees, readable by a non-technical reader.",
+  "proofSpec": "Paste the description into the deliverable field.",
+  "category": "copywriting"
+}

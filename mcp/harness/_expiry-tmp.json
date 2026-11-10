@@ -1,0 +1,1 @@
+{"action":"post_job","terms":{"title":"Tiny job for the expiry test","description":"A one-line deliverable so the job is realistic without being interesting.","criteria":"The line exists and is unambiguous.","proofSpec":"One line.","category":"test"},"budget":"50000000000000000000","bidDeadline":1794152575,"deliveryDeadline":1794238915,"autoReleaseSeconds":3600}
