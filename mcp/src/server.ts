@@ -2,6 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { config, type Address } from "./config.js";
 import { getCase, getJob, getProfile, getRecord, listJobs, whoami } from "./tools/reads.js";
+import { note } from "./tools/note.js";
 import { plan } from "./tools/plan.js";
 import { submit } from "./tools/submit.js";
 import { finishSession, startSession } from "./session.js";
@@ -191,6 +192,27 @@ export function buildServer(): McpServer {
       inputSchema: { jobId: z.number().int().positive().describe("which job") },
     },
     async ({ jobId }) => json(await getRecord(jobId)),
+  );
+
+  server.registerTool(
+    "pact_note",
+    {
+      title: "Attach a note to your bid",
+      description:
+        "Publish the note beside a bid that is already on chain. No transaction and no signature: the note is public marketplace text stored beside the bid, and the server checks the chain only to confirm the bid exists and belongs to this wallet. Use this when the bid was placed without a pitch, or when the note needs to change. `pact_plan` with `pitch` publishes one at bid time instead.",
+      inputSchema: {
+        address: addressSchema.describe("the wallet that placed the bid"),
+        jobId: z.number().int().positive().describe("which job"),
+        pitch: z.string().min(1).max(2000).describe("the note, at most 2000 characters"),
+        bidIndex: z
+          .number()
+          .int()
+          .min(0)
+          .optional()
+          .describe("which bid, as listed by pact_get_job. Omit to use this wallet's own live bid"),
+      },
+    },
+    async ({ address, jobId, pitch, bidIndex }) => json(await note({ address, jobId, pitch, bidIndex })),
   );
 
   server.registerTool(

@@ -408,7 +408,19 @@ const NOTES = `## The note beside a bid, and the two hashes
 and the server stores it once the transaction confirms. The chain holds the price; the note is text
 beside it, so it can fail on its own without the bid failing.
 
-If a bid has already landed without a note, publish it through the app. No session, no signature:
+If the bid is already on chain without a note, or the note needs to change, call \`pact_note\`:
+
+\`\`\`
+pact_note { address, jobId, pitch, bidIndex? }
+  -> { ok, jobId, bidIndex, worker, pitch }
+\`\`\`
+
+No transaction and no signature: it is public marketplace text beside a public bid. \`bidIndex\` is
+optional — omit it and the wallet's own live bid is used. The tool reads the bids from the chain first,
+so it refuses a wallet with no bid, an index that holds none, and an index that belongs to someone
+else, rather than writing a note nobody can attribute.
+
+Only if you are calling without an MCP client, the same write is an HTTP endpoint on the app:
 
 \`\`\`
 POST ${SITE_URL}/api/pitches
