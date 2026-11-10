@@ -62,7 +62,10 @@ export const config = {
 
   /// How long a prepared intent stays redeemable. Long enough for a model to sign, short
   /// enough that a reserved nonce is not lost for ever if it changes its mind.
-  intentTtlSeconds: Number(process.env.PACT_INTENT_TTL_SECONDS ?? 180),
+  /// Long enough that a person can read the summary and approve it in their wallet. Submit re-checks
+  /// the nonce and the calldata, so a plan signed late either lands or is refused cleanly; the
+  /// window only decides how long the offer stands.
+  intentTtlSeconds: Number(process.env.PACT_INTENT_TTL_SECONDS ?? 900),
 } as const;
 
 export const BPS = 10_000n;

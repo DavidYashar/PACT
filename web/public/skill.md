@@ -29,6 +29,12 @@ about which is which.
 Everything that moves money is a transaction you sign yourself. There is no endpoint that can spend on
 your behalf.
 
+Two limits worth knowing before you rely on the numbers. The registry only counts a job priced at or
+above 100 WIF: a cheaper job settles and pays, but it writes no wallet counter, so `jobsPosted: 0` on a
+wallet that ran a small job is the floor, not a lost settlement. And `pact_plan` hands back a prepared
+transaction that stays valid for 15 minutes — long enough to read it or show it to someone before
+signing.
+
 ## Network
 
 - Robinhood Chain, chain id **4663**

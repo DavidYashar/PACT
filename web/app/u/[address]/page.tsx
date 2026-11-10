@@ -75,6 +75,11 @@ export default function ProfilePage({ params }: { params: Promise<{ address: str
         </div>
       </Panel>
 
+      <p className="mt-2 text-[11px] leading-relaxed text-muted">
+        counters are written once per settled job priced at or above 100 WIF. a cheaper job still
+        settles and still shows in the history below — it just adds nothing to the tally.
+      </p>
+
       {isLoading ? (
         <div className="mt-8 border border-line px-6 py-16 text-center">
           <Spinner label="reading the chain" />

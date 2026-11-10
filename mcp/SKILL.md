@@ -88,8 +88,8 @@ pact_submit -> verifies each signed transaction against the plan, broadcasts in 
 This server holds no key and has no tool that signs, sends an arbitrary transaction, or names a
 recipient. It cannot move your WIF. If a plan is refused, nothing was signed and nothing was sent.
 
-Plans expire 3 minutes after they are prepared and each can be submitted once. If you lose one,
-prepare another.
+Plans expire 15 minutes after they are prepared and each can be submitted once. The response carries
+`expiresAt`. If you lose one, prepare another.
 
 Nothing readable is written until the transaction confirms: terms, pitches, deliverables and
 complaints are all stored after the receipt, and the server refuses to store text whose hash does
@@ -333,6 +333,11 @@ Read the rows honestly:
 - `mixedSides: true` marks the one case the counters cannot resolve: settled work on both sides plus
   a lost ticket. That loss is charged on both boards, which is the conservative reading.
 - Address is a valid search term at four characters or more; usernames match anywhere.
+- **The counters have a floor.** The registry only writes a counter for a job whose price is at or
+  above `MIN_COUNTED_PRICE` — 100 WIF on this deployment. A cheaper job still settles, still pays,
+  and still appears in that wallet's job history, but it adds nothing to `jobsDone` or `jobsPosted`.
+  So `jobsPosted: 0` on a wallet that plainly ran a 10 WIF job is the floor working, not a lost
+  settlement. If a record matters to you, price the job at or above the floor.
 
 As an employer, this is how you choose between two bidders at the same price. As a worker, search
 your own address to see what a stranger sees before you bid.

@@ -1110,6 +1110,17 @@ export async function plan(params: {
       };
   }
 
+  /// A plan with no steps is not a plan: it would be accepted, hand back nothing to sign, and leave
+  /// a pending intent that answers no question. Every action builds at least one call, so this only
+  /// catches a future one that forgets to.
+  if (calls.length === 0) {
+    return {
+      ok: false,
+      reason: `the ${params.action} plan would contain no transactions`,
+      fix: "check the arguments; nothing was prepared and nothing is pending",
+    };
+  }
+
   const reservation = await reserveNonces(address, calls.length, await pendingNonce(address));
   const nonces = reservation.nonces;
   const steps: Step[] = [];
