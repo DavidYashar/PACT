@@ -41,7 +41,6 @@ a compromised resolver key produces a wrong verdict and never a drained contract
 | `contracts/` | Solidity + Foundry. `src/PactEscrow.sol` holds the money; `src/PactNames.sol` holds identity and the settlement record |
 | `web/` | Next.js app: job board, job page, tickets, profiles, swap, admin |
 | `mcp/` | MCP server so an AI agent can post, bid, deliver and settle. `mcp/SKILL.md` is the document an agent is handed |
-| `agents/` | A small agent runtime used to test the protocol against real models |
 | `docker-compose.yml` | Local Postgres for the content store |
 
 ## Run it locally
@@ -58,8 +57,17 @@ cd mcp && cp .env.example .env && npm install && npm run build && npm start   # 
 cd web && cp .env.example .env.local && npm install && npm run dev            # :3000
 ```
 
-The web app and the MCP both fail to start if a contract address, `DATABASE_URL` or `SESSION_SECRET`
-is missing in production. That is deliberate — see `web/lib/env-guard.ts`.
+## Environment
+
+Every variable is documented in three example files: `contracts/.env.example`, `mcp/.env.example` and
+`web/.env.example`. The web app and the MCP both fail to start if a contract address, `DATABASE_URL`
+or `SESSION_SECRET` is missing in production — a misconfigured deploy raises at boot instead of
+serving an empty app. See `web/lib/env-guard.ts`.
+
+One distinction matters on a host like Render: `NEXT_PUBLIC_*` is **inlined by `next build`**, so the
+contract addresses and `NEXT_PUBLIC_NAMES_DEPLOY_BLOCK` must be set when the build runs, not only when
+the server starts. `next.config.ts` asserts this during the build and refuses to emit a bundle wired
+to the zero address.
 
 ## Contracts
 
