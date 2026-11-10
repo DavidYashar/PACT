@@ -4,50 +4,20 @@
 # them at build time: a value supplied only at runtime produces a bundle carrying the zero address,
 # and every read fails with no error on screen.
 #
-# Secrets are deliberately not in this file. Set them on the services (`SESSION_SECRET`,
-# `DATABASE_URL`, `PACT_MCP_URL`) — a blueprint with a secret in it is a secret in the repository.
+# Secrets are deliberately not in this file. Set `SESSION_SECRET` on both services — a blueprint with
+# a secret in it is a secret in the repository. `DATABASE_URL` is wired from the database below, so
+# there is nothing to paste for it.
+#
+# Deploy order matters once: the MCP has to exist before `PACT_MCP_URL` on the web service can point
+# at it. Both boot fine without each other; only the /admin diagnostics panel shows the MCP as
+# unreachable until that variable is set.
+
+databases:
+  - name: pact-db
+    plan: basic-256mb
+    postgresMajorVersion: "16"
 
 services:
-  - type: web
-    name: pact-web
-    runtime: node
-    plan: starter
-    rootDir: web
-    buildCommand: npm ci && npm run build
-    startCommand: npm start
-    healthCheckPath: /api/health
-    autoDeploy: true
-    envVars:
-      - key: NODE_VERSION
-        value: 22
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_CHAIN
-        value: mainnet
-      # Inlined into the browser bundle at build time. These are the live deployment.
-      - key: NEXT_PUBLIC_ESCROW_ADDRESS
-        value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
-      - key: NEXT_PUBLIC_NAMES_ADDRESS
-        value: 0x6EF287a4AFa957B81D899203E46a5186A6D3B810
-      - key: NEXT_PUBLIC_WIF_ADDRESS
-        value: 0x5173b8eA6923c2d40267890D45C46a3480954773
-      # The block the registry was created in. Above the chain head returns nothing at all, and the
-      # talent board renders empty rather than erroring.
-      - key: NEXT_PUBLIC_NAMES_DEPLOY_BLOCK
-        value: "110690230"
-      - key: NEXT_PUBLIC_WIF_USD
-        value: "0.00157"
-      - key: RPC_URL
-        sync: false
-      - key: LOGS_RPC_URL
-        sync: false
-      - key: SESSION_SECRET
-        sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: PACT_MCP_URL
-        sync: false
-
   - type: web
     name: pact-mcp
     runtime: node
@@ -60,8 +30,13 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pact-db
+          property: connectionString
       - key: PACT_RPC_URL
-        sync: false
+        value: https://rpc.mainnet.chain.robinhood.com
+      # The live deployment. Both addresses are required: the server refuses to boot without them.
       - key: PACT_ESCROW_ADDRESS
         value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
       - key: PACT_NAMES_ADDRESS
@@ -70,8 +45,49 @@ services:
         value: 0x5173b8eA6923c2d40267890D45C46a3480954773
       - key: PACT_ESCROW_DEPLOY_BLOCK
         value: "110690230"
-      # Must be the same value as the web service, or a token minted here is rejected there.
+      # Must be byte-identical to the web service's value, or a token minted here is rejected there.
       - key: SESSION_SECRET
         sync: false
+
+  - type: web
+    name: pact-web
+    runtime: node
+    plan: starter
+    rootDir: web
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22
       - key: DATABASE_URL
+        fromDatabase:
+          name: pact-db
+          property: connectionString
+      # Inlined into the browser bundle at build time. These are the live deployment.
+      - key: NEXT_PUBLIC_CHAIN
+        value: mainnet
+      - key: NEXT_PUBLIC_ESCROW_ADDRESS
+        value: 0x906a6E30B3E35a6A7838d2D01995da0E62b7C6a6
+      - key: NEXT_PUBLIC_NAMES_ADDRESS
+        value: 0x6EF287a4AFa957B81D899203E46a5186A6D3B810
+      - key: NEXT_PUBLIC_WIF_ADDRESS
+        value: 0x5173b8eA6923c2d40267890D45C46a3480954773
+      # The block the registry was created in. Above the chain head returns nothing at all, and the
+      # talent board would render empty rather than error.
+      - key: NEXT_PUBLIC_NAMES_DEPLOY_BLOCK
+        value: "110690230"
+      - key: NEXT_PUBLIC_WIF_USD
+        value: "0.00157"
+      # Server-only RPC. Never NEXT_PUBLIC_*: those are inlined into the browser bundle.
+      - key: RPC_URL
+        value: https://rpc.mainnet.chain.robinhood.com
+      - key: LOGS_RPC_URL
+        value: https://rpc.mainnet.chain.robinhood.com
+      # Same value as the MCP service.
+      - key: SESSION_SECRET
+        sync: false
+      # Set this to the MCP's public URL once it exists, e.g. https://pact-mcp.onrender.com
+      - key: PACT_MCP_URL
         sync: false
