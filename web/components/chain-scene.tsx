@@ -21,14 +21,13 @@ const BLOCK = 84;
 const TICK_MS = 10_000;
 const SEED = 21;
 
-type Block = { key: number; born: number };
 type Pose = { x: number; y: number; s: number };
 
 export function ChainScene() {
   const wrap = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(1200);
   const [active, setActive] = useState<number | null>(null);
-  const [{ tick, blocks, nextKey }, setState] = useState(() => ({
+  const [{ tick, blocks }, setState] = useState(() => ({
     tick: 0,
     blocks: Array.from({ length: SEED }, (_, i) => ({ key: i + 1, born: i - (SEED - 1) })),
     nextKey: SEED + 1,

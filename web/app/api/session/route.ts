@@ -47,12 +47,12 @@ export async function POST(request: Request) {
       { status: 429, headers: { "retry-after": String(Math.ceil(limited.retryAfterMs / 1000)) } },
     );
   }
-  let body: { address?: string; signature?: string };
-  try {
-    body = (await request.json()) as { address?: string; signature?: string };
-  } catch {
-    return NextResponse.json({ error: "invalid json" }, { status: 400 });
+  const parsed = await readJsonWithLimit<{ address?: string; signature?: string }>(request, MAX_BODY_BYTES);
+  if (parsed instanceof PayloadTooLarge) {
+    return NextResponse.json({ error: `body exceeds ${MAX_BODY_BYTES} bytes` }, { status: 413 });
   }
+  if (!parsed) return NextResponse.json({ error: "invalid json" }, { status: 400 });
+  const body = parsed;
 
   const { address, signature } = body;
   if (!isAddressLike(address) || typeof signature !== "string") {

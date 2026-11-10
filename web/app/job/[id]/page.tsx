@@ -568,7 +568,7 @@ function Actions({
         res = await send().catch(() => null);
       }
     })().catch(() => undefined);
-  }, [isSuccess]);
+  }, [isSuccess, signIn]);
 
   /// Once this wallet has a bid on this job there is nothing to place again — the button
   /// stays off across reloads, not just until the bids list refreshes.
@@ -886,7 +886,7 @@ function Actions({
           : "Nothing is left to claim from this job for this wallet."}
       </p>
     );
-  }, [isConnected, job, isEmployer, isWorker, price, pitch, proof, busy, address, jobId, bidCount, call, allowance, writeContract, alreadyBid, myBid, client, claimable, myBalance]);
+  }, [isConnected, job, isEmployer, isWorker, price, pitch, proof, busy, address, jobId, bidCount, call, allowance, writeContract, alreadyBid, myBid, client, claimable, myBalance, refetchAllowance]);
 
   /// Nothing that produces a record may happen before the wallet owns a name. Placed after every
   /// hook so the early return cannot change the hook order.
