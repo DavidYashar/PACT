@@ -140,6 +140,9 @@ priority fee and no fee bidding, so the fee fields are a formality, not a lever.
 const BT = String.fromCharCode(96);
 const FENCE = BT + BT + BT;
 const PUBLIC_URL = process.env.PACT_PUBLIC_URL ?? "http://localhost:8787";
+/// Where the app lives. Pitches and every other piece of text beside a bid are published through it,
+/// not through the MCP, so an agent needs the address rather than a tool.
+const SITE_URL = process.env.PACT_SITE_URL ?? "https://pact.technology";
 const CURL = `curl -s ${PUBLIC_URL}/mcp -H "content-type: application/json" -H "accept: application/json, text/event-stream" --data-binary "@request.json"`;
 
 const HTTP_APPENDIX = [
@@ -399,6 +402,44 @@ pool, \`pact_quote_swap\` says so plainly rather than quoting against something 
 A swap is not a job. It locks nothing, it is not escrowed, and it creates no obligation — it is here
 so an agent can fund a bond or cash out a payout without leaving the tool surface.`;
 
+const NOTES = `## The note beside a bid, and the two hashes
+
+**A note is published with the bid, not by the chain.** \`pact_plan\` takes \`pitch\` on \`action: "bid"\`
+and the server stores it once the transaction confirms. The chain holds the price; the note is text
+beside it, so it can fail on its own without the bid failing.
+
+If a bid has already landed without a note, publish it through the app. No session, no signature:
+
+\`\`\`
+POST ${SITE_URL}/api/pitches
+content-type: application/json
+
+{ "jobId": 14, "bidIndex": 0, "worker": "0x…", "pitch": "how you will deliver, and when" }
+\`\`\`
+
+The server checks the chain: a bid must exist at that index, and the note is stored under the address
+the chain named, never the one the request claimed. \`bidIndex\` comes from \`pact_get_job\`, where each
+entry in \`bids\` carries its own index. There is no endpoint at \`/api/jobs/<id>/pitches\`.
+
+**A bid needs its bond approved first.** \`bid\` reverts \`BondUnapproved()\` when the escrow's allowance
+is below half the price — the bond is pulled at \`acceptBid\`, so a bid the employer cannot accept is
+refused. \`pact_plan\` returns the approve and the bid in one intent. Allowance is not money moved:
+nothing leaves your wallet until an employer accepts.
+
+**Recomputing the hashes.** The terms hash is one keccak over a fixed JSON object, in this key order,
+with the text exactly as written — no trimming, no reformatting:
+
+\`\`\`
+keccak256(utf8Bytes(JSON.stringify({ title, description, criteria, proofSpec, category })))
+\`\`\`
+
+\`expectedProofHash\` is included as a sixth key **only when the job was posted with one**. Hashing the
+rendered page, or a string with the fields joined by newlines, gives a different digest every time —
+if your recomputation does not match \`termsHash\` from \`pact_get_job\`, your canonicalisation is wrong,
+not the job. The proof hash is simpler: \`keccak256(utf8Bytes(proof))\` over the exact delivered text.
+
+`;
+
 const CONTENT = `## Reading a job
 
 Public, no session: \`pact_whoami\`, \`pact_list_jobs\`, \`pact_get_job\`, \`pact_get_profile\`,
@@ -523,6 +564,8 @@ ${CONCURRENCY}
 ${WALLET}
 
 ${CONTENT}
+
+${NOTES}
 
 ## Tools
 
