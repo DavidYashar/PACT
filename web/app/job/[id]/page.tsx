@@ -208,7 +208,15 @@ export default function JobPage({ params }: { params: Promise<{ id: string }> })
         reload={reloadContent}
       />
 
-      <Actions job={job} jobId={jobId} isEmployer={isEmployer} isWorker={isWorker} bids={bids} />
+      <Actions
+        job={job}
+        jobId={jobId}
+        isEmployer={isEmployer}
+        isWorker={isWorker}
+        bids={bids}
+        pitches={pitches}
+        onNoteSaved={reloadContent}
+      />
 
 
       <BidList job={job} jobId={jobId} bids={bids} pitches={pitches} isEmployer={isEmployer} />
@@ -501,12 +509,16 @@ function Actions({
   isEmployer,
   isWorker,
   bids,
+  pitches,
+  onNoteSaved,
 }: {
   job: Job;
   jobId: number;
   isEmployer: boolean;
   isWorker: boolean;
   bids: Bid[];
+  pitches: { bidIndex: number; worker: string; pitch: string }[];
+  onNoteSaved?: () => void;
 }) {
   const { address, isConnected } = useAccount();
   const { ready: nameReady, registered } = useIsRegistered(address);
@@ -526,6 +538,11 @@ function Actions({
   /// a plain success flag cannot tell a completed bid from a completed approval.
   const action = useRef<"approve" | "bid" | null>(null);
   const [bidPlaced, setBidPlaced] = useState(false);
+  /// A pitch is the only write the chain cannot vouch for, so the server wants a signed session for
+  /// it and that request can fail after the bid has already landed. When it does, the bid is on chain
+  /// and the note beside it is gone, with nothing on screen saying so — which is what this holds.
+  const [noteProblem, setNoteProblem] = useState<string | null>(null);
+  const [noteDraft, setNoteDraft] = useState("");
 
   const call = useCallback(
     (functionName: string, args: unknown[], kind: "approve" | "bid" | null = null) => {
@@ -541,6 +558,43 @@ function Actions({
   /// how the pitch finds the bid index the contract actually assigned it.
   const pendingWrite = useRef<{ path: string; body: unknown | (() => Promise<unknown>) } | null>(null);
 
+  /// Publish the note beside a bid and report why it failed, if it did. The index comes from the
+  /// chain rather than from what the page thinks, because a bid placed a moment ago may already have
+  /// moved it.
+  const publishNote = useCallback(
+    async (text: string): Promise<string | null> => {
+      if (!address || !client) return "connect the wallet that placed the bid";
+      let index = -1;
+      try {
+        const fresh = (await client.readContract({
+          address: ESCROW_ADDRESS,
+          abi: pactAbi,
+          functionName: "getBids",
+          args: [BigInt(jobId)],
+        })) as Bid[];
+        index = fresh.findIndex((b) => b.worker.toLowerCase() === address.toLowerCase());
+      } catch {
+        return "could not read the bids back from the chain";
+      }
+      if (index < 0) return "the chain has no bid from this wallet on this job";
+
+      const post = () =>
+        fetch("/api/pitches", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ jobId, bidIndex: index, worker: address, pitch: text.trim() || "—" }),
+        }).catch(() => null);
+
+      let res = await post();
+      if (res && res.status === 401 && (await signIn())) res = await post();
+      if (!res) return "the note could not be sent";
+      if (res.ok) return null;
+      const payload = (await res.json().catch(() => ({}))) as { error?: string };
+      return payload.error ?? `the server refused the note (http ${res.status})`;
+    },
+    [address, client, jobId, signIn],
+  );
+
   useEffect(() => {
     if (!isSuccess) return;
 
@@ -552,6 +606,16 @@ function Actions({
 
     void (async () => {
       const body = typeof pending.body === "function" ? await pending.body() : pending.body;
+
+      if (pending.path === "/api/pitches") {
+        const text = (body as { pitch?: string }).pitch ?? "";
+        setNoteDraft(text);
+        const problem = await publishNote(text);
+        setNoteProblem(problem);
+        if (!problem) onNoteSaved?.();
+        return;
+      }
+
       const send = () =>
         fetch(pending.path, {
           method: "POST",
@@ -568,7 +632,7 @@ function Actions({
         res = await send().catch(() => null);
       }
     })().catch(() => undefined);
-  }, [isSuccess, signIn]);
+  }, [isSuccess, publishNote, onNoteSaved, signIn]);
 
   /// Once this wallet has a bid on this job there is nothing to place again — the button
   /// stays off across reloads, not just until the bids list refreshes.
@@ -623,12 +687,46 @@ function Actions({
       const shortOfBond = requiredBond > 0n && myBalance < requiredBond;
 
       if (alreadyBid) {
+        const myIndex = myBid ? bids.findIndex((b) => b.worker.toLowerCase() === myBid.worker.toLowerCase()) : -1;
+        const hasNote = myIndex >= 0 && pitches.some((p) => p.bidIndex === myIndex);
         return (
           <div className="flex flex-col gap-3">
             <p className="text-[13px] leading-relaxed text-accent">
               Your bid is in{myBid ? ` — ${formatWif(myBid.price)} WIF` : ""}. The employer decides which bid to
               accept; nothing is pulled from your wallet until they accept yours.
             </p>
+            {!hasNote ? (
+              <div className="border border-warn/40 bg-warn/5 p-3 text-[12px] leading-relaxed text-warn">
+                <p>
+                  This bid has no note attached. The chain holds your price; the text beside it is stored
+                  separately and needs a wallet signature, so it can fail on its own without the bid failing.
+                </p>
+                {noteProblem ? <p className="mt-1 text-danger">{noteProblem}</p> : null}
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <input
+                    className={inputClass}
+                    value={noteDraft}
+                    onChange={(e) => setNoteDraft(e.target.value)}
+                    placeholder="how you'll deliver, and when"
+                    disabled={busy}
+                  />
+                  <Button
+                    variant="ghost"
+                    disabled={busy || !noteDraft.trim()}
+                    onClick={async () => {
+                      const problem = await publishNote(noteDraft);
+                      setNoteProblem(problem);
+                      if (!problem) {
+                        setNoteDraft("");
+                        onNoteSaved?.();
+                      }
+                    }}
+                  >
+                    attach the note
+                  </Button>
+                </div>
+              </div>
+            ) : null}
             <p className="text-[12px] leading-relaxed text-muted">
               One bid per wallet on a job. This panel comes back only if the employer cancels and reposts.
             </p>
@@ -886,7 +984,7 @@ function Actions({
           : "Nothing is left to claim from this job for this wallet."}
       </p>
     );
-  }, [isConnected, job, isEmployer, isWorker, price, pitch, proof, busy, address, jobId, bidCount, call, allowance, writeContract, alreadyBid, myBid, client, claimable, myBalance, refetchAllowance]);
+  }, [isConnected, job, isEmployer, isWorker, price, pitch, proof, busy, address, jobId, bidCount, call, allowance, writeContract, alreadyBid, myBid, client, claimable, myBalance, refetchAllowance, bids, pitches, noteDraft, noteProblem, publishNote, onNoteSaved]);
 
   /// Nothing that produces a record may happen before the wallet owns a name. Placed after every
   /// hook so the early return cannot change the hook order.
