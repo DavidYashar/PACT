@@ -16,6 +16,7 @@ type Overview = {
   escrowBalance: string;
   treasuryBalance: string;
   treasuryClaimable: string;
+  withdrawn: string;
   cut: string;
   filingFees: string;
   earned: string;
@@ -53,9 +54,11 @@ function TreasuryBody({ data, reload }: { data: Overview; reload: () => void }) 
   const earned = BigInt(data.earned);
   const claimable = BigInt(data.treasuryClaimable);
   const balance = BigInt(data.treasuryBalance);
-  /// Earned should be exactly what has been withdrawn plus what is still claimable.
-  /// Anything else means the page and the chain disagree, so say so rather than hide it.
-  const gap = earned - claimable - balance;
+  const withdrawn = BigInt(data.withdrawn);
+  /// Earned is exactly what has been withdrawn plus what is still claimable. The wallet balance is
+  /// deliberately not part of this: money can leave the wallet, and that has nothing to do with whether
+  /// the fee ledger adds up.
+  const gap = earned - claimable - withdrawn;
 
   const { writeContract, data: hash, isPending, error, reset } = useWriteContract();
   const { isLoading: confirming, isSuccess } = useWaitForTransactionReceipt({ hash });
@@ -88,7 +91,7 @@ function TreasuryBody({ data, reload }: { data: Overview; reload: () => void }) 
             label="treasury wallet"
             value={shortAddress(data.treasury)}
             href={addressUrl(data.treasury)}
-            note={`${formatWif(balance)} WIF withdrawn`}
+            note={`${formatWif(balance)} WIF in the wallet`}
           />
           <Row label="resolver" value={shortAddress(data.resolver)} href={addressUrl(data.resolver)} />
           <Row
@@ -126,7 +129,12 @@ function TreasuryBody({ data, reload }: { data: Overview; reload: () => void }) 
             <span className="mono text-[10px] text-warn">
               reconciliation gap of {formatWif(gap)} — the page and the chain disagree
             </span>
-          ) : null}
+          ) : (
+            <span className="mono text-[10px] text-muted">
+              withdrawn {formatWif(withdrawn)} + claimable {formatWif(claimable)} = earned{" "}
+              {formatWif(earned)}
+            </span>
+          )}
         </div>
 
         {isSuccess ? (

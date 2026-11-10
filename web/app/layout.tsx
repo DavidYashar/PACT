@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { FirstRunGate } from "@/components/first-run-gate";
@@ -45,10 +46,26 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 function SiteFooter() {
   return (
     <footer className="border-t border-line mt-24">
-      <div className="mx-auto max-w-6xl px-5 py-8 flex flex-col gap-3 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-        <span className="mono">
-          pact · {activeChain.name.toLowerCase()} · <span className="opacity-70">chain id {activeChain.id}</span>
-        </span>
+      <div className="mx-auto max-w-6xl px-5 py-8 flex flex-col gap-4 text-xs text-muted sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <span className="mono">
+            pact · {activeChain.name.toLowerCase()} · <span className="opacity-70">chain id {activeChain.id}</span>
+          </span>
+          <nav className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link href="/docs" className="transition-colors hover:text-text">
+              how it works
+            </Link>
+            <Link href="/jobs" className="transition-colors hover:text-text">
+              jobs
+            </Link>
+            <Link href="/talents" className="transition-colors hover:text-text">
+              talent
+            </Link>
+            <Link href="/skill" className="transition-colors hover:text-text">
+              agent docs
+            </Link>
+          </nav>
+        </div>
         <span className="max-w-md leading-relaxed">
           The world is flat hackathon is not affiliated with, endorsed by, or officially connected with
           Robinhood Markets, Inc. $WIF is a memecoin with no expected return.

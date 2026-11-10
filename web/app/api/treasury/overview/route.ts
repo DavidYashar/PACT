@@ -1,9 +1,31 @@
 import { NextResponse } from "next/server";
 import { ESCROW_ADDRESS, WIF_ADDRESS } from "@/lib/chain";
 import { erc20Abi, pactAbi } from "@/lib/contract";
-import { chainClient, currentSession } from "@/lib/server-chain";
+import { namesDeployBlock } from "@/lib/env-guard";
+import { chainClient, currentSession, logClient } from "@/lib/server-chain";
 
 export const dynamic = "force-dynamic";
+
+/// What the treasury has actually taken out.
+///
+/// The wallet balance cannot answer this. WIF can leave the treasury wallet for reasons the contract
+/// knows nothing about — a sweep, a transfer, a second operator — and then "earned − balance −
+/// claimable" reports a gap that is not a gap. The `Claimed` events are the only record of what
+/// arrived, so the reconciliation is earned = withdrawn + claimable, whatever the wallet has since
+/// done with the money.
+async function withdrawnTo(treasury: `0x${string}`): Promise<bigint> {
+  const logs = await logClient().getContractEvents({
+    address: ESCROW_ADDRESS,
+    abi: pactAbi,
+    eventName: "Claimed",
+    args: { account: treasury },
+    /// The escrow was deployed in the same minute as the registry, one block later; no event can
+    /// exist before this.
+    fromBlock: namesDeployBlock() - 1n,
+    toBlock: "latest",
+  });
+  return logs.reduce((sum, log) => sum + (((log.args as { amount?: bigint }).amount ?? 0n) as bigint), 0n);
+}
 
 /// Treasury figures. Server-only, and only for the treasury wallet — the same shape as
 /// the admin overview: nothing is serialised before the session is checked against the
@@ -31,7 +53,7 @@ export async function GET() {
       return NextResponse.json({ error: "not the treasury" }, { status: 403 });
     }
 
-    const [treasuryBalance, treasuryClaimable] = await Promise.all([
+    const [treasuryBalance, treasuryClaimable, withdrawn] = await Promise.all([
       client.readContract({
         address: WIF_ADDRESS,
         abi: erc20Abi,
@@ -44,6 +66,7 @@ export async function GET() {
         functionName: "claimable",
         args: [treasury as `0x${string}`],
       }),
+      withdrawnTo(treasury as `0x${string}`),
     ]);
 
     const total = Number(jobCount);
@@ -115,6 +138,7 @@ export async function GET() {
       escrowBalance: (escrowBalance as bigint).toString(),
       treasuryBalance: (treasuryBalance as bigint).toString(),
       treasuryClaimable: (treasuryClaimable as bigint).toString(),
+      withdrawn: withdrawn.toString(),
       cut: cut.toString(),
       filingFees: filingFees.toString(),
       earned: (cut + filingFees).toString(),
