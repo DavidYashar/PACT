@@ -12,6 +12,12 @@
 # at it. Both boot fine without each other; only the /admin diagnostics panel shows the MCP as
 # unreachable until that variable is set.
 
+# Top-level region, so every resource below lands in the same one. Render's internal
+# `connectionString` only resolves between resources in the same region: a service in a different
+# region than the database receives a hostname it cannot reach, and that surfaces as a boot timeout
+# rather than a configuration error. Change this line and all three move together.
+region: oregon
+
 databases:
   - name: pact-db
     plan: basic-256mb
