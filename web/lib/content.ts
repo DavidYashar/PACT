@@ -285,6 +285,21 @@ export async function databaseStats(): Promise<Record<string, number>> {
   return Object.fromEntries(rows.map((row) => [row.table, row.n]));
 }
 
+/// A bare round trip, so the number measures the connection rather than the row counts. Best of
+/// three: the first statement on an idle pool pays the TLS handshake, which is a one-off, not a
+/// standing cost.
+export async function dbPing(samples = 3): Promise<number> {
+  const client = await ensureSchema();
+  if (!client) throw new Error("no database configured");
+  let best = Number.POSITIVE_INFINITY;
+  for (let i = 0; i < samples; i += 1) {
+    const started = Date.now();
+    await client`select 1 as ok`;
+    best = Math.min(best, Date.now() - started);
+  }
+  return best;
+}
+
 /// The escrow whose rows this process may see. Job ids restart at 1 on every redeploy, so a
 /// row without an escrow is a row from a deployment that is no longer the one being read.
 function escrowScope(): string {

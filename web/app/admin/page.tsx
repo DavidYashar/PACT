@@ -234,11 +234,36 @@ type Health = { status?: string; [key: string]: unknown };
 
 type DiagnosticsReport = {
   ok: boolean;
+  web: Health;
   chain: Health;
   database: Health;
   mcp: Health;
   configuration: Record<string, string | number>;
 };
+
+/// One line per part, in the units an operator can act on: what it is spending and how far behind it
+/// is. A service can be out of memory, out of CPU, or waiting on a neighbour, and those look
+/// identical on a page that only prints "ok".
+function detail(health: Health): string {
+  const parts: string[] = [];
+  if (typeof health.latencyMs === "number") parts.push(`${health.latencyMs}ms`);
+  if (typeof health.pingMs === "number") parts.push(`ping ${health.pingMs}ms`);
+  if (typeof health.statsMs === "number") parts.push(`counts ${health.statsMs}ms`);
+  if (typeof health.eventLoopLagMs === "number") parts.push(`loop lag ${health.eventLoopLagMs}ms`);
+  if (typeof health.rssMb === "number") parts.push(`${health.rssMb}mb rss`);
+  if (typeof health.uptimeSeconds === "number") parts.push(`up ${health.uptimeSeconds}s`);
+  if (typeof health.head === "string") parts.push(`head ${health.head}`);
+  if (typeof health.database === "string") parts.push(`db ${health.database}`);
+  if (health.error) parts.push(String(health.error).slice(0, 90));
+  if (health.tables) {
+    parts.push(
+      Object.entries(health.tables as Record<string, number>)
+        .map(([table, count]) => `${table} ${count}`)
+        .join(", "),
+    );
+  }
+  return parts.length ? ` · ${parts.join(" · ")}` : "";
+}
 
 /// Is each part of the deployment actually up? The chain, the database this process writes to, and
 /// the MCP service — which is a different process and therefore a different thing to be wrong.
@@ -272,8 +297,9 @@ function Diagnostics() {
         <div>
           <h2 className="text-[13px] font-medium text-text">diagnostics</h2>
           <p className="mt-1.5 max-w-xl text-[11px] leading-relaxed text-muted">
-            chain, database and the agent surface, measured now. a failed part is a failed deployment,
-            not a slow page.
+            web, chain, database and the agent surface, measured now. web reports memory and event-loop
+            lag, the database a bare round trip, the mcp the hop to it. a failed part is a failed
+            deployment, not a slow page.
           </p>
         </div>
         <Button variant="ghost" onClick={() => void load()}>
@@ -293,6 +319,7 @@ function Diagnostics() {
         <div className="divide-y divide-line">
           {(
             [
+              ["web", report.web],
               ["chain", report.chain],
               ["database", report.database],
               ["mcp", report.mcp],
@@ -302,10 +329,7 @@ function Diagnostics() {
               <span className="mono text-[11px] uppercase tracking-[0.12em] text-muted">{name}</span>
               <span className={`mono text-[12px] ${tone(health.status)}`}>
                 {health.status ?? "unknown"}
-                {typeof health.latencyMs === "number" ? ` · ${health.latencyMs}ms` : ""}
-                {typeof health.head === "string" ? ` · head ${health.head}` : ""}
-                {health.error ? ` · ${String(health.error).slice(0, 90)}` : ""}
-                {health.tables ? ` · ${Object.entries(health.tables as Record<string, number>).map(([t, n]) => `${t} ${n}`).join(", ")}` : ""}
+                {detail(health)}
               </span>
             </div>
           ))}
