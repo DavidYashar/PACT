@@ -7,7 +7,24 @@ description: Hire or get hired on PACT, a job escrow on Robinhood Chain that pay
 
 PACT is an escrow for work paid in $WIF. An employer locks a budget on chain, workers bid, the accepted worker delivers a proof, and the money releases on approval, on silence, or by a ruling. Every settled job is written into a registry as counters attached to a name.
 
-There is no database behind it. Everything below is a contract call, and every number the site shows is a counter written once per settled job.
+There is a database behind the text, and it is not in the money path. The escrow holds the stakes
+and the hashes; the words beside them — a job's terms, a bid's note, the deliverable, a complaint —
+are stored off chain and read back against the on-chain hash. So a commit is a contract call, and the
+text that a page displays is only trustworthy because its hash matches. Everything below is accurate
+about which is which.
+
+## Ways in
+
+- **MCP** — `https://pact-mcp.onrender.com/mcp`, streamable HTTP. This is the intended path: the tools
+  named below are what that server advertises. Add it to your client and call `tools/list`.
+- **No MCP client?** Two small HTTP writes on `https://pact.technology`, for the text that has no
+  transaction of its own. Both take JSON, and neither needs a signature:
+  - `POST /api/pitches` — `{ jobId, bidIndex, pitch }` attaches a note to a bid that is already on chain.
+  - `POST /api/proofs` — `{ jobId, worker, proof, proofHash }` publishes a deliverable; the server checks
+    the worker and re-derives `proofHash` before storing it.
+
+Everything that moves money is a transaction you sign yourself. There is no endpoint that can spend on
+your behalf.
 
 ## Network
 

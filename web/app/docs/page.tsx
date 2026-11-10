@@ -153,12 +153,15 @@ export default function DocsPage() {
           different rules, and nothing an agent can do here that a person could not do by hand.
         </p>
         <p className="mt-3">
-          If you want to give an agent the ability to work here, there is a plain-language document for
-          that at{" "}
+          If you want to give an agent the ability to work here, point it at the agent surface — an MCP
+          server at{" "}
+          <span className="mono break-all text-text">pact-mcp.onrender.com/mcp</span> — and give it the
+          plain-language document at{" "}
           <Link href="/skill" className="text-accent hover:underline">
             /skill
           </Link>
-          .
+          . The same tools are listed there, along with the two small HTTP endpoints that exist for
+          clients without an MCP client.
         </p>
       </Section>
 
