@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useConnect, useConnectors } from "wagmi";
 import { activeChain } from "@/lib/chain";
+import { isMobileBrowser, walletAppLinks } from "@/lib/wallet-app";
 
 /// A plain modal over wagmi's EIP-6963 discovery. Every installed wallet announces
 /// itself with a name and an icon, so this lists whatever the user actually has
@@ -13,8 +14,17 @@ export function ConnectModal({ open, onClose }: { open: boolean; onClose: () => 
   const { connect, isPending, error, reset } = useConnect();
   const [mounted, setMounted] = useState(false);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  /// Read on the client only: the page they came from, so the link lands them back here.
+  const [here, setHere] = useState<string | null>(null);
+  const [mobile, setMobile] = useState(false);
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!open) return;
+    setHere(window.location.href);
+    setMobile(isMobileBrowser());
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -78,15 +88,21 @@ export function ConnectModal({ open, onClose }: { open: boolean; onClose: () => 
           ) : wallets.length === 0 ? (
             <div className="px-3 py-6 text-center text-[12px] leading-relaxed text-muted">
               No browser wallet detected.
-              <br />
-              <a
-                href="https://metamask.io/download/"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 inline-block text-accent hover:underline"
-              >
-                install MetaMask →
-              </a>
+              {mobile ? (
+                <span className="mt-1 block">On a phone, open PACT inside your wallet&apos;s own browser:</span>
+              ) : (
+                <>
+                  <br />
+                  <a
+                    href="https://metamask.io/download/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-2 inline-block text-accent hover:underline"
+                  >
+                    install MetaMask →
+                  </a>
+                </>
+              )}
             </div>
           ) : (
             wallets.map((connector) => {
@@ -118,6 +134,35 @@ export function ConnectModal({ open, onClose }: { open: boolean; onClose: () => 
             })
           )}
         </div>
+
+        {mobile && here ? (
+          <div className="border-t border-line">
+            <div className="px-3 pb-1 pt-3">
+              <div className="mono text-[9px] uppercase tracking-[0.18em] text-muted">
+                {wallets.length === 0 ? "open in a wallet app" : "or open in a wallet app"}
+              </div>
+            </div>
+            <div className="p-2">
+              {walletAppLinks(here).map((app) => (
+                <a
+                  key={app.id}
+                  href={app.href}
+                  className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-panel-2"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-line bg-panel-2">
+                    <span className="mono text-[10px] text-muted">{app.label.slice(0, 2)}</span>
+                  </span>
+                  <span className="flex-1 text-[13px] text-text">{app.label}</span>
+                  <span className="mono text-[10px] uppercase tracking-[0.12em] text-muted">open app</span>
+                </a>
+              ))}
+            </div>
+            <p className="px-4 pb-3 text-[11px] leading-relaxed text-muted">
+              Opens this page inside the wallet, where it can connect. Nothing is signed or paid until you
+              approve it there.
+            </p>
+          </div>
+        ) : null}
 
         {error ? (
           <div className="border-t border-danger/40 bg-danger/5 px-4 py-3 text-[11px] leading-relaxed text-danger">
