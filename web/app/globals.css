@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Palette. Two neutrals, one surface pair, one accent, two semantic. See DESIGN.md. */
+  /* Palette. Two neutrals, one surface pair, one accent, two semantic. */
   --color-bg: #08090a;
   --color-panel: #0d0f11;
   --color-panel-2: #121518;

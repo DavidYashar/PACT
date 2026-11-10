@@ -48,7 +48,7 @@ export function assertDeployment(): void {
 
   if (problems.length) {
     throw new Error(
-      `PACT refuses to start: ${problems.join("; ")}. See MAINNET.md and .env.example.`,
+      `PACT refuses to start: ${problems.join("; ")}. See .env.example for every variable this needs.`,
     );
   }
 }

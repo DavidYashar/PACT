@@ -5,7 +5,7 @@ import Link from "next/link";
 import { formatUsd, formatWif } from "@/lib/format";
 
 /// The console slab: title left, one-line note right, content below. Every screen's primary
-/// object sits in one, and nothing floats on a shadow. See DESIGN.md, "Composition".
+/// object sits in one, and nothing floats on a shadow.
 export function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div className={`panel-sheen rounded-[16px] border border-line bg-panel ${className}`}>{children}</div>

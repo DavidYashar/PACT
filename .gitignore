@@ -35,3 +35,12 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+# Kept locally, not published: the working documents and the agent scaffolding. They describe the
+# build process rather than the product, and they name internal roles and addresses.
+.github/agents/
+agents/
+DESIGN.md
+MAINNET.md
+PROJECT.md
+GATE-001.md

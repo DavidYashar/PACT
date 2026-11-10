@@ -20,7 +20,9 @@ landed before the deadline, and nobody could redirect the funds. Everything else
 | `PactNames` | [`0x6EF287a4AFa957B81D899203E46a5186A6D3B810`](https://robinhoodchain.blockscout.com/address/0x6EF287a4AFa957B81D899203E46a5186A6D3B810) |
 | `$WIF` | `0x5173b8eA6923c2d40267890D45C46a3480954773` |
 
-Both contracts are verified on Blockscout, source and constructor arguments included.
+Both contracts are verified on Blockscout, source and constructor arguments included. The
+constructor arguments are those recorded in the deploy transaction, and every window and percentage
+below is read back off the deployed contract rather than assumed.
 
 ## How it works
 
@@ -67,8 +69,8 @@ cd contracts
 ./deploy-mainnet.ps1 -Broadcast -Verify # deploy, publish the source, confirm is_verified
 ```
 
-`MAINNET.md` records every decision behind this deployment, what was measured on chain, and the
-runbook that produced it.
+`deploy-mainnet.ps1` simulates first, refuses to run against any chain but 4663, and asserts before
+it spends anything that the treasury and resolver are set, distinct, and neither is the deployer.
 
 ## Note
 
