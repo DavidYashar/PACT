@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { listPitches, savePitch, type BidPitch } from "@/lib/content";
-import { currentSession, readBids } from "@/lib/server-chain";
+import { readBids } from "@/lib/server-chain";
 import { clientIp, rateLimit } from "@/lib/request-guard";
 
 export const dynamic = "force-dynamic";
@@ -17,14 +17,15 @@ export async function GET(request: Request) {
   }
 }
 
-/// A pitch is the only off-chain write with no on-chain commitment behind it: the bid commits a
-/// price, and the note beside it is free text. Everything else here is verified by re-deriving a
-/// hash the contract already holds, which is impossible for free text — so authorship is the only
-/// thing that can bind a pitch to a person, and authorship means a signed session.
+/// A pitch is public marketplace text, like the bid it accompanies: anyone can already read the bid
+/// list, so there is nothing here to protect and no reason to make the author sign for it. The write
+/// is therefore unauthenticated, and that is a deliberate trade: the chain holds the price and the
+/// worker who offered it, and this note is only ever displayed beside that bid. The one check that
+/// matters is that a bid really exists at the index the note names — a note cannot create a bid, and
+/// the address stored is the one the chain named, never the one the request claimed.
 ///
-/// Two checks, in order. The session says which wallet is writing. The chain says whether that
-/// wallet actually holds a bid at the index the note claims, which also rejects an index invented
-/// to land the note under someone else's name.
+/// Private text — a deliverable, a complaint — is a different thing and does require a session,
+/// because it must not leave the server for anyone but the parties and the resolver.
 export async function POST(request: Request) {
   const limited = rateLimit(`pitches:${clientIp(request)}`, 30, 60_000);
   if (!limited.allowed) {
@@ -45,17 +46,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "jobId, bidIndex, pitch required" }, { status: 400 });
   }
 
-  const session = await currentSession();
-  if (!session) return NextResponse.json({ error: "unauthorised" }, { status: 401 });
-
-  if (body.worker && body.worker.toLowerCase() !== session.address.toLowerCase()) {
-    return NextResponse.json({ error: "a pitch belongs to the wallet that wrote it" }, { status: 403 });
-  }
-
   const bids = await readBids(body.jobId);
   const bid = bids[body.bidIndex];
-  if (!bid || bid.worker.toLowerCase() !== session.address.toLowerCase()) {
-    return NextResponse.json({ error: "no bid by this wallet at that index" }, { status: 409 });
+  if (!bid) return NextResponse.json({ error: "no bid at that index" }, { status: 409 });
+
+  if (body.worker && body.worker.toLowerCase() !== bid.worker.toLowerCase()) {
+    return NextResponse.json({ error: "that index belongs to a different wallet" }, { status: 403 });
   }
 
   try {

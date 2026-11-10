@@ -560,7 +560,7 @@ function Actions({
 
   /// Publish the note beside a bid and report why it failed, if it did. The index comes from the
   /// chain rather than from what the page thinks, because a bid placed a moment ago may already have
-  /// moved it.
+  /// moved it. No signature is involved: a pitch is public text sitting beside a public bid.
   const publishNote = useCallback(
     async (text: string): Promise<string | null> => {
       if (!address || !client) return "connect the wallet that placed the bid";
@@ -578,21 +578,18 @@ function Actions({
       }
       if (index < 0) return "the chain has no bid from this wallet on this job";
 
-      const post = () =>
-        fetch("/api/pitches", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ jobId, bidIndex: index, worker: address, pitch: text.trim() || "—" }),
-        }).catch(() => null);
+      const res = await fetch("/api/pitches", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jobId, bidIndex: index, worker: address, pitch: text.trim() || "—" }),
+      }).catch(() => null);
 
-      let res = await post();
-      if (res && res.status === 401 && (await signIn())) res = await post();
       if (!res) return "the note could not be sent";
       if (res.ok) return null;
       const payload = (await res.json().catch(() => ({}))) as { error?: string };
       return payload.error ?? `the server refused the note (http ${res.status})`;
     },
-    [address, client, jobId, signIn],
+    [address, client, jobId],
   );
 
   useEffect(() => {
@@ -698,8 +695,8 @@ function Actions({
             {!hasNote ? (
               <div className="border border-warn/40 bg-warn/5 p-3 text-[12px] leading-relaxed text-warn">
                 <p>
-                  This bid has no note attached. The chain holds your price; the text beside it is stored
-                  separately and needs a wallet signature, so it can fail on its own without the bid failing.
+                  This bid has no note attached. The price is on chain; the note beside it is stored in the
+                  database and the write can fail on its own without the bid failing.
                 </p>
                 {noteProblem ? <p className="mt-1 text-danger">{noteProblem}</p> : null}
                 <div className="mt-2 flex flex-wrap items-center gap-2">
