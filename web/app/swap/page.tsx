@@ -235,8 +235,17 @@ function SwapCard({ pool }: { pool: NonNullable<(typeof POOLS)[number]> }) {
     sendTransaction({ to: tx.to, data: tx.data, value: tx.value });
   }, [address, amountIn, amountOutMinimum, pool, sendTransaction, side]);
 
+  /// WIF per ETH, normalised to one whole ETH in both directions, because the raw quote is for
+  /// whatever size was typed. Both legs are 18 decimals, so `wifWei * 1e18 / ethWei` is the rate in
+  /// 18-decimal fixed point — which is what `formatWif` expects. The 1e18 is not decoration: without
+  /// it the number is off by the size of the trade, and a 0.01 ETH buy printed "17.5k WIF per ETH"
+  /// (the WIF received) instead of the rate.
   const ratePerEth =
-    amountOut !== undefined && amountOut > 0n ? (side === "buy" ? amountOut : (amountIn * 10n ** 18n) / amountOut) : undefined;
+    amountOut !== undefined && amountOut > 0n && amountIn > 0n
+      ? side === "buy"
+        ? (amountOut * 10n ** 18n) / amountIn
+        : (amountIn * 10n ** 18n) / amountOut
+      : undefined;
 
   return (
     <div className="space-y-4">

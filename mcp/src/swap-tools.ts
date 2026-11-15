@@ -50,7 +50,8 @@ export async function quoteSwap(params: { side: "buy" | "sell"; amountIn: string
   const q = await quoteExactIn(client as never, p, zeroForOne, amountIn);
   const slippageBps = params.slippageBps ?? 100;
 
-  /// The rate either way, so an agent can report a price without doing decimal maths badly.
+  /// Always WIF per ETH, whichever way the trade goes, so an agent can report a price without doing
+  /// decimal maths badly.
   const inUnit = Number(amountIn) / 1e18;
   const outUnit = Number(q.amountOut) / 1e18;
 
@@ -69,7 +70,7 @@ export async function quoteSwap(params: { side: "buy" | "sell"; amountIn: string
     amountIn: inUnit,
     amountOut: outUnit,
     rate: zeroForOne ? outUnit / inUnit : inUnit / outUnit,
-    rateLabel: zeroForOne ? "WIF per ETH" : "ETH per WIF",
+    rateLabel: "WIF per ETH",
     slippageBps,
     amountOutMinimum: withSlippage(q.amountOut, slippageBps).toString(),
     note: "the pool takes a 1% fee on every trade, charged by its hook. The quote already includes it.",
